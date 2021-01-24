@@ -1,3 +1,7 @@
+<?php 
+    session_start();
+    include_once './function.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,11 +63,18 @@
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <? if($_GET['alertDanger']) :?> 
+                                    <?php display_flash_message('danger')?>
+
+                                  <!--   ? if(isset($_SESSION['danger'])) :?> 
                                      <div class="alert alert-danger text-dark" role="alert">
-                                        <strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.
+                                       ?php 
+                                        echo $_SESSION['danger'];
+                                        unset($_SESSION['danger']);
+                                        ?>
                                      </div>
-                                    <? endif; ?>
+                                    ? endif; ?> -->
+
+
                                     <form id="js-login" novalidate="" action="./login.php" method="POST">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>

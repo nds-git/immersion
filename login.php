@@ -1,5 +1,8 @@
 <?php
-  include_once './c/add_login.php';
+  session_start();
+  include_once './c/register.php';
+  include_once './function.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +39,7 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?=$success?>
+            <?php display_flash_message('success')?>
             <form action="">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
