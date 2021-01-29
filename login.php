@@ -2,7 +2,7 @@
   session_start();
   include_once './c/register.php';
   include_once './function.php';
-
+ //var_dump( $_SESSION["$style"] );die
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,14 +40,14 @@
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
             <?php display_flash_message('success')?>
-            <form action="">
+            <form action="./c/authorization.php"  method="POST">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
-                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="">
+                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="" name = "email" />
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-control" placeholder="" >
+                    <input type="password" id="password" class="form-control" placeholder="" value="" name = "password" />
                 </div>
                 <div class="form-group text-left">
                     <div class="custom-control custom-checkbox">
@@ -55,7 +55,7 @@
                         <label class="custom-control-label" for="rememberme">Запомнить меня</label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default float-right">Войти</button>
+                <button type="submit" class="btn btn-default float-right" name="authorization">Войти</button>
             </form>
         </div>
         <div class="blankpage-footer text-center">

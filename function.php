@@ -14,7 +14,7 @@
    "$pass",
    array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset")
   );
-  $sql = "SELECT `email` FROM `login` WHERE `email` = :email";
+  $sql = "SELECT * FROM `login` WHERE `email` = :email";
   $statement    = $pdo->prepare($sql);
   $statement   -> execute ([
                   "email" => $email  
@@ -23,9 +23,6 @@
   return $user;
  }
   
- function set_flash_message($style,$message) {
-  $_SESSION["$style"] = $message;
- } 
 
  function redirect_to($path) {
    header("Location: ./$path");
@@ -58,6 +55,10 @@
    ]);  
   }
 
+  function set_flash_message($style,$message) {
+   $_SESSION["$style"] = $message;
+  } 
+
   function display_flash_message($style) {
    if(isset($_SESSION[$style])) {
     echo "<div class=\"alert alert-{$style} text-dark\" role=\"alert\">
@@ -66,4 +67,17 @@
     unset($_SESSION[$style]);
    }
   }
- // $pdo -> close(); //это нужно или нет в pdo??
+
+
+/*
+*      Функция для проверки авторизации пользователя
+*      email - найти в базе нужный нам e-mail
+*      password - сравнить хэш пароль  
+*/
+function authorization($email,$password) {
+   $auth = get_user_by_email($email);
+   if(password_verify($password, $auth['password']))
+      return true;
+    else
+      return false;
+  }
