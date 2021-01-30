@@ -16,11 +16,11 @@
       set_flash_message("danger","<strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.");
       redirect_to ("page_register.php");
     }
-
-    add_user($email,$password);
-    set_flash_message("success","<strong>Поздравляем!</strong> Вы успешно зарегались.");
-    redirect_to ("login.php");
-
+    else {
+     add_user($email,$password);
+     set_flash_message("success","<strong>Поздравляем!</strong> Вы успешно зарегались.");
+     redirect_to ("login.php");
+    }
   }//fin если существует $_POST['email']) AND isset( $_POST['password'])
  }// fin $_POST['login'] 
  // else // Если данные не переданы

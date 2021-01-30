@@ -23,7 +23,6 @@
   return $user;
  }
   
-
  function redirect_to($path) {
    header("Location: ./$path");
    exit();
@@ -55,6 +54,26 @@
    ]);  
   }
 
+
+/*
+*      Функция для проверки авторизации пользователя
+*      email - найти в базе нужный нам e-mail
+*      password - сравнить хэш пароль  
+*/
+function authorization($email,$password) {
+   $auth = get_user_by_email($email);
+   if(password_verify($password, $auth['password']))
+      return true;
+    else
+      return false;
+  }
+
+/*
+*      Функция для получения стиля в $_SESSION
+*      danger   - красный
+*      success  - зелененький  
+*/
+
   function set_flash_message($style,$message) {
    $_SESSION['style']   = $style;
    $_SESSION['message'] = $message;
@@ -71,16 +90,3 @@
    }
   }
 
-
-/*
-*      Функция для проверки авторизации пользователя
-*      email - найти в базе нужный нам e-mail
-*      password - сравнить хэш пароль  
-*/
-function authorization($email,$password) {
-   $auth = get_user_by_email($email);
-   if(password_verify($password, $auth['password']))
-      return true;
-    else
-      return false;
-  }

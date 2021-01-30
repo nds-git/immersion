@@ -1,6 +1,8 @@
 <?php 
     session_start();
+    include_once './c/register.php';
     include_once './function.php';
+
     // var_dump($_SESSION);die
 ?>
 <!DOCTYPE html>

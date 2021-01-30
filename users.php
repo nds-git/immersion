@@ -1,3 +1,10 @@
+<?php
+  session_start();
+  include_once './function.php';
+  include_once './c/authorization.php';
+  // var_dump($_SESSION);die
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +42,7 @@
 
         <main id="js-page-content" role="main" class="page-content mt-3">
             <div class="alert alert-success">
-                Профиль успешно обновлен.
+                <?php display_flash_message(); ?> 
             </div>
             <div class="subheader">
                 <h1 class="subheader-title">
