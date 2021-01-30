@@ -41,9 +41,9 @@
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-            <div class="alert alert-success">
+            <!-- <div class="alert alert-success"> -->
                 <?php display_flash_message(); ?> 
-            </div>
+            <!-- </div> -->
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
