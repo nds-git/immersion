@@ -1,8 +1,8 @@
 <?php
   session_start();
-  include_once './c/register.php';
   include_once './function.php';
- //var_dump( $_SESSION["$style"] );die
+  include_once './c/register.php';
+  // var_dump($_SESSION);die
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +39,7 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?php display_flash_message('success')?>
+            <?php display_flash_message(); ?>
             <form action="./c/authorization.php"  method="POST">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>

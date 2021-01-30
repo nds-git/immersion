@@ -56,15 +56,18 @@
   }
 
   function set_flash_message($style,$message) {
-   $_SESSION["$style"] = $message;
+   $_SESSION['style']   = $style;
+   $_SESSION['message'] = $message;
   } 
 
-  function display_flash_message($style) {
-   if(isset($_SESSION[$style])) {
-    echo "<div class=\"alert alert-{$style} text-dark\" role=\"alert\">
-            {$_SESSION[$style]}
+  function display_flash_message() {
+   if(isset($_SESSION['style'])) {
+    echo "<div class=\"alert alert-{$_SESSION['style']} text-dark\" role=\"alert\">
+            {$_SESSION['message']}
         </div>";
-    unset($_SESSION[$style]);
+    unset($_SESSION['style']);
+    unset($_SESSION['message']);
+
    }
   }
 

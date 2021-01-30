@@ -1,6 +1,7 @@
 <?php 
     session_start();
     include_once './function.php';
+    // var_dump($_SESSION);die
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,17 +64,7 @@
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <?php display_flash_message('danger')?>
-
-                                  <!--   ? if(isset($_SESSION['danger'])) :?> 
-                                     <div class="alert alert-danger text-dark" role="alert">
-                                       ?php 
-                                        echo $_SESSION['danger'];
-                                        unset($_SESSION['danger']);
-                                        ?>
-                                     </div>
-                                    ? endif; ?> -->
-
+                                    <?php display_flash_message(); ?>
 
                                     <form id="js-login" novalidate="" action="./login.php" method="POST">
                                         <div class="form-group">

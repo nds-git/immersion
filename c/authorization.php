@@ -9,7 +9,7 @@
     
     $auth = authorization($email,$password);
     
-    //var_dump($auth);die;
+    // var_dump($auth);die;
 
     if(!$auth) {
      set_flash_message("danger","<strong>Уведомление!</strong> Пароль не верный.");
