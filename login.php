@@ -40,7 +40,7 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?php display_flash_message(); ?>
+            <?php display_flash_message('danger'); ?>
             <form action="users.php"  method="POST">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>

@@ -10,7 +10,7 @@
 
     $user = get_user_by_email($email);
     
-    // var_dump($user);die;
+    //var_dump($user);die;
 
     if(!empty($user)) {
       set_flash_message("danger","<strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.");

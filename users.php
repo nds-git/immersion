@@ -41,9 +41,12 @@
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-            <!-- <div class="alert alert-success"> -->
-                <?php display_flash_message(); ?> 
-            <!-- </div> -->
+            
+            <?php
+              display_flash_message('success'); 
+              echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
+            ?> 
+            
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
@@ -130,6 +133,9 @@
                         </div>
                     </div>
                 </div>
+                <!-- fin <div class="col-xl-4" -->
+
+
                 <div class="col-xl-4">
                     <div id="c_2" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="alita gray">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
@@ -193,6 +199,10 @@
                         </div>
                     </div>
                 </div>
+
+
+
+                
                 <div class="col-xl-4">
                     <div id="c_3" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="dr john cook">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">

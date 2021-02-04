@@ -9,7 +9,7 @@
     
     $auth = authorization($email,$password);
     
-    // var_dump($auth);die; 
+    //var_dump($auth);die; 
 
     if(!$auth) {
      set_flash_message("danger","<strong>Уведомление!</strong> Пароль не верный.");
@@ -17,7 +17,7 @@
      redirect_to ("../login.php");
     }
     else {
-     set_flash_message("success","<strong>Приветствую!</strong> На нашем сайте.");
+     set_flash_message("success","<strong>Приветствую!</strong> На нашем сайте. ");
      // var_dump($_SESSION);die;
      redirect_to ("../users.php");
     }

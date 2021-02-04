@@ -63,7 +63,10 @@
 function authorization($email,$password) {
    $auth = get_user_by_email($email);
    if(password_verify($password, $auth['password']))
-      return true;
+      {
+        $_SESSION['auth'] = $auth;
+        return true;
+      }
     else
       return false;
   }
@@ -74,19 +77,16 @@ function authorization($email,$password) {
 *      success  - зелененький  
 */
 
-  function set_flash_message($style,$message) {
-   $_SESSION['style']   = $style;
-   $_SESSION['message'] = $message;
+  function set_flash_message($class,$message) {
+    $_SESSION['$class']   = $message;
   } 
 
-  function display_flash_message() {
-   if(isset($_SESSION['style'])) {
-    echo "<div class=\"alert alert-{$_SESSION['style']} text-dark\" role=\"alert\">
-            {$_SESSION['message']}
+  function display_flash_message($class) {
+   if(isset($_SESSION['$class'])) {
+    echo "<div class=\"alert alert-{$class} text-dark\" role=\"alert\">
+            {$_SESSION['$class']}
         </div>";
-    unset($_SESSION['style']);
-    unset($_SESSION['message']);
-
+    unset($_SESSION['$class']);
    }
   }
 
