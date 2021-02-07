@@ -54,8 +54,8 @@
         <main id="js-page-content" role="main" class="page-content mt-3">
             
             <?php
-              display_flash_message('success'); 
-              echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
+             display_flash_message($_SESSION['class'],$_SESSION['message']); 
+             echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
             ?> 
             
             <div class="subheader">

@@ -1,10 +1,14 @@
 <?php
 session_start();
-include_once './function.php';
-// var_dump($_SESSION);die
+
+ $var = file('./variant.txt');
+ $current_var = 0;
+ $res = file('./results.txt'); 
+ //текущий элемень  массива res = 1
+ $current_res = 1;
+ $itog = 0;
+
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,24 +24,31 @@ include_once './function.php';
     <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
 </head>
 <body>
-    <?php display_flash_message($_SESSION['class'],$_SESSION['message']);?>
         <form action="./c_ed.php" method="POST">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
                             <div class="panel-hdr">
-                                <h2>Общая информация</h2>
+                                <h2><?=$var[$current_var]?></h2>
                             </div>
                             <div class="panel-content">
-                                <!-- username -->
-                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" name="ivanov" class="form-control" value="Иван иванов">
-                                 </div>
-                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning" name = "edit" type="submit">Редактировать</button>
-                                 </div>
+                            <?php 
+                             $current_var++;
+                             for(;$current_var<count($var);$current_var++,$current_res++)
+                             {
+                                echo "<input name = \"first\" type=\"radio\" value=" .$current_var. " /> $var[$current_var]";
+                                echo "&nbsp;&nbsp;&nbsp; ( " .$res[$current_res]. " )";
+                                echo "<br/><br/>";
+                                $itog += $res[$current_res];
+                             };
+                            ;
+                            ?>
+                             <button class="btn btn-warning" name = "add_vote" type="submit">Голосовать</button>
+                             <br/>
+                             <div class="alert alert-success text-dark" role="alert" style="width:20%;margin-top:20px; ">
+                              Всего проголосовало: <?=$itog;?>
+                             </div>
                             </div>
                         </div>
                     </div>
