@@ -1,9 +1,8 @@
 <?php 
-    session_start();
-    include_once './c/register.php';
-    include_once './function.php';
+  session_start();
+  include_once './function.php';
 
-    // var_dump($_SESSION);die
+  // var_dump($_SESSION);die
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,9 +65,8 @@
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <?php display_flash_message(); ?>
-
-                                    <form id="js-login" novalidate="" action="./login.php" method="POST">
+                                    <?php display_flash_message($_SESSION['class'],$_SESSION['message']); ?>
+                                    <form id="js-login" novalidate="" action="/c/register.php" method="POST">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>
                                             <input type="email" name = "email" id="emailverify" class="form-control" placeholder="Эл. адрес" required>

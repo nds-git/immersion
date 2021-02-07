@@ -1,5 +1,5 @@
 <?php
- include_once './function.php';
+ include_once '../function.php';
 
  if(isset($_POST['authorization'])) {
   if( isset($_POST['email']) AND isset( $_POST['password']) )  //Если есть данные
@@ -13,8 +13,8 @@
 
     if(!$auth) {
      set_flash_message("danger","<strong>Уведомление!</strong> Пароль не верный.");
-     // var_dump($_SESSION);die;
-     redirect_to ("../login.php");
+     //var_dump($_SESSION);die;
+     redirect_to ("/login.php");
     }
     else {
      set_flash_message("success","<strong>Приветствую!</strong> На нашем сайте. ");
@@ -23,5 +23,9 @@
     }
   }//fin если существует $_POST['email']) AND isset( $_POST['password'])
  }// fin $_POST['login'] 
- // else // Если данные не переданы
- //  echo "Данные не переданы!"; //Выводим сообщение об ошибке
+ 
+
+
+
+
+

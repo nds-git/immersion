@@ -1,6 +1,6 @@
 <?php
- include_once './m/db.php';
- include_once './function.php';
+session_start();
+ include_once '../function.php';
 
  if(isset($_POST['login'])) {
   if( isset($_POST['email']) AND isset( $_POST['password']) )  //Если есть данные
@@ -10,16 +10,23 @@
 
     $user = get_user_by_email($email);
     
-    //var_dump($user);die;
+    // var_dump($user);die;
 
     if(!empty($user)) {
       set_flash_message("danger","<strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.");
-      redirect_to ("page_register.php");
+      // var_dump($_SESSION);die;
+      header("Location: /page_register.php");
+      exit();
+      // redirect_to ("page_register.php");
     }
     else {
+    // var_dump($password);die;
      add_user($email,$password);
-     set_flash_message("success","<strong>Поздравляем!</strong> Вы успешно зарегались.");
-     redirect_to ("login.php");
+    // var_dump($us);die;
+     set_flash_message(
+       "success",
+       "<strong>Поздравляем!</strong> Вы успешно зарегались.");
+     redirect_to ("../login.php");
     }
   }//fin если существует $_POST['email']) AND isset( $_POST['password'])
  }// fin $_POST['login'] 

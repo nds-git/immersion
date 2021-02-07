@@ -1,9 +1,20 @@
 <?php
   session_start();
   include_once './function.php';
-  include_once './c/authorization.php';
-  // var_dump($_SESSION);die
+  is_not_logged_in($_SESSION['auth']['role']) ;
+/*
+*      Вывод всего списка пользователей     
+*/
+  $user_list = get_all_user();
+/*
+*      Создание прав для админа     
+*/
+  $role = $_SESSION['auth']['role'];
 
+// $str = 'qazwsx';
+// echo md5($str);
+  // var_dump($_SESSION);die
+  // var_dump($user_list);die
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,8 +65,9 @@
             </div>
             <div class="row">
                 <div class="col-xl-12">
-                    <a class="btn btn-success" href="create_user.html">Добавить</a>
-
+                    <?php if($role == 'admin')  { ?>
+                        <a class="btn btn-success" href="create_user.html">Добавить</a>
+                    <?php } ?>        
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                         <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
                         <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
@@ -70,16 +82,23 @@
                 </div>
             </div>
             <div class="row" id="js-contacts">
+
+                <!-- старт цикла для вывода всех юзеров 
+                    $user_list - основной массив из БД
+                -->
+                <?php    
+                 foreach ($user_list as $u_list):
+                ?>
                 <div class="col-xl-4">
                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="oliver kopyov">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
                                 <span class="status status-success mr-3">
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url('img/demo/avatars/avatar-b.png'); background-size: cover;"></span>
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url('img/demo/avatars/<?=$u_list[img]?>.png'); background-size: cover;"></span>
                                 </span>
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
-                                        Oliver Kopyov
+                                        <?=$u_list[name]?> <?=$u_list[lastname]?>
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                     </a>
@@ -102,7 +121,8 @@
                                             Удалить
                                         </a>
                                     </div>
-                                    <span class="text-truncate text-truncate-xl">IT Director, Gotbootstrap Inc.</span>
+                                    <span class="text-truncate text-truncate-xl"><?=$u_list[edu]?>, 
+                                        <?=$u_list[prof]?></span>
                                 </div>
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
                                     <span class="collapsed-hidden">+</span>
@@ -113,11 +133,12 @@
                         <div class="card-body p-0 collapse show">
                             <div class="p-3">
                                 <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mobile-alt text-muted mr-2"></i> +1 317-456-2564</a>
+                                    <i class="fas fa-mobile-alt text-muted mr-2"></i> 
+                                    <?=$u_list[phone]?></a>
                                 <a href="mailto:oliver.kopyov@smartadminwebapp.com" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> oliver.kopyov@smartadminwebapp.com</a>
+                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?=$u_list[email]?></a>
                                 <address class="fs-sm fw-400 mt-4 text-muted">
-                                    <i class="fas fa-map-pin mr-2"></i> 15 Charist St, Detroit, MI, 48212, USA</address>
+                                    <i class="fas fa-map-pin mr-2"></i><?=$u_list[address]?></address>
                                 <div class="d-flex flex-row">
                                     <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#4680C2">
                                         <i class="fab fa-vk"></i>
@@ -133,9 +154,10 @@
                         </div>
                     </div>
                 </div>
+                <?endforeach?>
                 <!-- fin <div class="col-xl-4" -->
 
-
+<!-- 
                 <div class="col-xl-4">
                     <div id="c_2" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="alita gray">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
@@ -580,7 +602,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+
+
+
+
             </div>
         </main>
      

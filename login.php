@@ -1,7 +1,6 @@
 <?php
   session_start();
-  include_once './c/register.php';
-  include_once './c/authorization.php';
+  include_once './function.php';
 
   // var_dump($_SESSION);die
 ?>
@@ -40,8 +39,8 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?php display_flash_message('danger'); ?>
-            <form action="users.php"  method="POST">
+         <?php display_flash_message($_SESSION['class'],$_SESSION['message']); ?>
+            <form action="/c/authorization.php" method="POST">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
                     <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="" name = "email" />
