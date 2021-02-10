@@ -1,6 +1,7 @@
 <?php
   session_start();
   include_once './function.php';
+  // var_dump($_SESSION);die;
   is_not_logged_in($_SESSION['auth']['role']) ;
 /*
 *      Вывод всего списка пользователей     
@@ -97,11 +98,16 @@
                                     <span class="rounded-circle profile-image d-block " style="background-image:url('img/demo/avatars/<?=$u_list[img]?>.png'); background-size: cover;"></span>
                                 </span>
                                 <div class="info-card-text flex-1">
-                                    <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
-                                        <?=$u_list[name]?> <?=$u_list[lastname]?>
+                                    <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false"><?=$u_list[name]?> <?=$u_list[lastname]?>
+                                    
+                                    <?php 
+                                     // необходимо дать права только админу на исправление для всех пользователей
+                                     // и пользователю только его учетной записи                                      
+                                     if($role == 'admin' || $u_list[email] == $_SESSION['auth']['email'])  { ?>
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                     </a>
+
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="edit.html">
                                             <i class="fa fa-edit"></i>
@@ -121,6 +127,10 @@
                                             Удалить
                                         </a>
                                     </div>
+                                    <?php  } else {  ?>
+                                          </a>
+                                        <? } ?> 
+
                                     <span class="text-truncate text-truncate-xl"><?=$u_list[edu]?>, 
                                         <?=$u_list[prof]?></span>
                                 </div>

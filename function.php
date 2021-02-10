@@ -14,10 +14,25 @@
   $statement    = $pdo->prepare($sql);
   $statement   -> execute ([
                   "email" => $email  
-  ]);    
+  ]);
   $user = $statement  -> fetch(PDO::FETCH_ASSOC);
   return $user;
  }
+/*
+*     Добавление в базу нового пользователя 
+*       
+*/
+  function add_user($email,$password) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+  $sql = "INSERT INTO `login` (`email`, `password`) VALUES (:email,  :password)";
+  // INSERT INTO `login` (`email`, `password`) VALUES ("qp@pr.ru",  "ssvdvsv")
+  // https://askdev.ru/q/pole-mysql-error-1364-ne-imeet-znacheniy-po-umolchaniyu-32825/
+  // STRICT_TRANS_TABLES,
+  $statement = $pdo->prepare($sql);
+  $statement -> execute(["email" => $email,"password" => password_hash($password, PASSWORD_DEFAULT)]);
+  }
 
  /*
 *      Функция для получения стиля в $_SESSION
@@ -44,26 +59,6 @@
    header("Location: /$path");
    exit();
  }
-/*
-*     Добавление в базу нового пользователя 
-*       
-*/
-  function add_user($email,$password) {
-  $charset = 'SET NAMES utf8';
-
-  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
-  $sql = "INSERT INTO `login` 
-                  (`email`, `password`)
-                  VALUES 
-                  (:email, :password)";
-
-  $statement    = $pdo->prepare($sql);
-  $statement->execute([
-    "email"     => $email,
-    "password"  => password_hash($password, PASSWORD_DEFAULT)
-   ]);  
-  }
-
 
 /*
 *      Функция для проверки авторизации пользователя
@@ -92,7 +87,7 @@ function authorization($email,$password) {
 */
 function is_not_logged_in($session) {
   if(!isset($session))
-    header("Location: ./login.php");
+    header("Location: /login.php");
 }
 
 /*
