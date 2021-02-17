@@ -2,7 +2,8 @@
 session_start();
 include_once '../function.php';
 
-if( isset($_POST['email']) AND isset( $_POST['password']) )  //Если есть данные
+if( isset($_POST['email']) AND isset( $_POST['password']) AND
+    !empty($_POST['email']) AND !empty( $_POST['password']) )  //Если есть данные
 {
  $email     = trim(htmlspecialchars($_POST['email']));  
  $password  = trim(htmlspecialchars($_POST['password'])); 

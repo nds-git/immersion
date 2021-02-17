@@ -1,3 +1,18 @@
+<?php
+  session_start();
+  include_once './function.php';
+  /*
+  * var_dump($_SESSION);die;
+  * необходимо проверить, что только админ может зайти на 
+  * страницу добавления пользователей
+  * а также, что админ авторизован, а не просто вошел
+  */
+
+  $role = $_SESSION['auth']['role'];
+  ($role == 'admin') ? is_not_logged_in($_SESSION['auth']['role']) : redirect_to ("users.php");
+  
+  clean_session();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,24 +39,21 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="page_login.html">Войти</a>
+                    <a class="nav-link" href="./login.php">Войти</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
                 </li>
             </ul>
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+        <?php display_flash_message($_SESSION['class'],$_SESSION['message']); ?>
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя
-            </h1>
-
-
-
+                <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя</h1>
         </div>
-        <form action="">
+        <form action="/c/add-user.php" method="POST">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -53,25 +65,29 @@
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name = "name" />
                                 </div>
-
+                                <!-- user lastname -->
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Фамилия</label>
+                                    <input type="text" id="simpleinput" class="form-control" name = "lastname" />
+                                </div>
                                 <!-- title -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="simpleinput">Профессия</label>
+                                    <input type="text" id="simpleinput" class="form-control" name = "prof" />
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name = "phone" />
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name = "address" />
                                 </div>
                             </div>
                         </div>
@@ -88,29 +104,36 @@
                                 <!-- email -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name = "email" />
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input type="password" id="simpleinput" class="form-control" name = "password" />
                                 </div>
 
                                 
                                 <!-- status -->
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Выберите статус</label>
-                                    <select class="form-control" id="example-select">
+                                    <select class="form-control" id="example-select" name = "status" />
                                         <option>Онлайн</option>
                                         <option>Отошел</option>
                                         <option>Не беспокоить</option>
                                     </select>
                                 </div>
-
+                                <!-- role -->
+                                <div class="form-group">
+                                    <label class="form-label" for="example-select">Выберите статус</label>
+                                    <select class="form-control" id="example-select" name = "role" />
+                                        <option>user</option>
+                                        <option>admin</option>
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input type="file" id="example-fileinput" class="form-control-file" name = "img" />
                                 </div>
                             </div>
                         </div>
@@ -137,7 +160,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name = "vk" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -151,7 +174,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name = "teleg" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -165,11 +188,11 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name = "insta" />
                                         </div>
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-success">Добавить</button>
+                                     <button class="btn btn-success" type="submit" name="create_user">Добавить</button>
                                     </div>
                                 </div>
                             </div>

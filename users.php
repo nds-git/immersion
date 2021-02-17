@@ -11,11 +11,8 @@
 *      Создание прав для админа     
 */
   $role = $_SESSION['auth']['role'];
-
-// $str = 'qazwsx';
-// echo md5($str);
-  // var_dump($_SESSION);die
-  // var_dump($user_list);die
+  
+  clean_session();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +43,7 @@
                         <a class="nav-link" href="page_login.html">Войти</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Выйти</a>
+                        <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
                     </li>
                 </ul>
             </div>
@@ -67,7 +64,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <?php if($role == 'admin')  { ?>
-                        <a class="btn btn-success" href="create_user.html">Добавить</a>
+                        <a class="btn btn-success" href="./create_user.php">Добавить</a>
                     <?php } ?>        
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                         <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
