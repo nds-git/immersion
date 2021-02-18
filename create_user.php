@@ -1,11 +1,13 @@
 <?php
   session_start();
   include_once './function.php';
+   // var_dump($_SESSION);die;
+
   /*
-  * var_dump($_SESSION);die;
-  * необходимо проверить, что только админ может зайти на 
-  * страницу добавления пользователей
-  * а также, что админ авторизован, а не просто вошел
+   *  var_dump($_SESSION);die;
+   *  необходимо проверить, что только админ может зайти на 
+   *  страницу добавления пользователей
+   *  а также, что админ авторизован, а не просто вошел
   */
 
   $role = $_SESSION['auth']['role'];
@@ -111,9 +113,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
                                     <input type="password" id="simpleinput" class="form-control" name = "password" />
-                                </div>
-
-                                
+                                </div>   
                                 <!-- status -->
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Выберите статус</label>
@@ -125,7 +125,7 @@
                                 </div>
                                 <!-- role -->
                                 <div class="form-group">
-                                    <label class="form-label" for="example-select">Выберите статус</label>
+                                    <label class="form-label" for="example-select">Права доступа</label>
                                     <select class="form-control" id="example-select" name = "role" />
                                         <option>user</option>
                                         <option>admin</option>
@@ -207,13 +207,9 @@
     <script src="js/vendors.bundle.js"></script>
     <script src="js/app.bundle.js"></script>
     <script>
-
-        $(document).ready(function()
-        {
-
-          
-        });
-
+     $(document).ready(function()
+     {  
+     });
     </script>
 </body>
 </html>

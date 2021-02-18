@@ -38,7 +38,9 @@ if( isset($_POST['email']) AND isset( $_POST['password']) AND
   $insta       = htmlspecialchars($_POST['insta']); 
 
 
-  $user_id = add_basic_info($name,$lastname,$prof,$phone,$address);
+  $user_id = add_user_basic_info($name,$lastname,$prof,$phone,$address,$role);
+  $user_smm = add_user_smm($user_id,$vk,$teleg,$insta);
+
   if(!empty($user_id)) {
    set_flash_message("success","<strong>Поздравляем!</strong> Пользователь добавлен.");
    redirect_to ("create_user.php");
