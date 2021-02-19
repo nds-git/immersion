@@ -30,6 +30,7 @@ if( isset($_POST['email']) AND isset( $_POST['password']) AND
   $address      = htmlspecialchars($_POST['address']);
 
   $img          = htmlspecialchars($_POST['img']);
+
   $role         = htmlspecialchars($_POST['role']); 
  
   //блок SMM
@@ -39,7 +40,8 @@ if( isset($_POST['email']) AND isset( $_POST['password']) AND
 
 
   $user_id = add_user_basic_info($name,$lastname,$prof,$phone,$address,$role);
-  $user_smm = add_user_smm($user_id,$vk,$teleg,$insta);
+  update_user_smm($user_id,$vk,$teleg,$insta);
+
 
   if(!empty($user_id)) {
    set_flash_message("success","<strong>Поздравляем!</strong> Пользователь добавлен.");

@@ -136,26 +136,58 @@
    // var_dump($statement);die;
    // Получаем id вставленной записи
    $user_id = $pdo->lastInsertId();
+
+   $sql2 = "INSERT INTO `user_smm` (`user_id`) VALUES (:user_id)";
+   $statement2 = $pdo->prepare($sql2);
+   $statement2 -> execute([
+    "user_id"  => $user_id,
+   ]);
+
+   $sql3 = "INSERT INTO `user_img` (`user_id`) VALUES (:user_id)";
+   $statement3 = $pdo->prepare($sql3);
+   $statement3 -> execute([
+    "user_id"  => $user_id,
+   ]);
+
    return $user_id;
   }
   // INSERT INTO `login` (`name`, `lastname`,  `prof`, `phone`, `address`) VALUES ('Вася', 'Gegv', 'он', 'lf', 'fdf');
 
 /*
-  *     Добавление в базу данных SMM нового пользователя 
+  *     Изменение табл `user_smm` данные SMM нового пользователя 
   *     на странице create_user.php  
+  *     UPDATE `user_smm` SET `vk` = 'vk', `teleg` = 'teleg',`insta` = 'insta' WHERE `user_id` = 100
 */
-  function add_user_smm($user_id,$vk,$teleg,$insta) {
+  function update_user_smm($user_id,$vk,$teleg,$insta) {
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
-   $sql = "INSERT INTO `user_smm` (`user_id`,`vk`,`teleg`,`insta`) VALUES (:user_id, :vk, :teleg, :insta)";
+   $sql = "UPDATE `user_smm` 
+           SET `vk` =  :vk, `teleg` = :teleg,`insta` = :insta
+           WHERE `user_id` = :user_id";
    $statement = $pdo->prepare($sql);
    // var_dump($statement);die;
    $statement -> execute([
-    "user_id"  => $user_id,
     "vk"       => $vk,
     "teleg"    => $teleg,
-    "insta"    => $insta
+    "insta"    => $insta,
+    "user_id"  => $user_id
+   ]);
+  } 
+  
+  /*
+  *     Добавление в таблицу `user_img` данные SMM нового пользователя
+  *     на странице create_user.php  
+*/
+  function update_user_img($user_id,$img) {
+   $charset = 'SET NAMES utf8';
+
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+   $sql = "UPDATE `user_img` SET `user_id` = :user_id,`vk` =  :vk, `teleg` = :teleg,`insta` = :insta";
+   $statement = $pdo->prepare($sql);
+   $statement -> execute([
+    "user_id"  => $user_id,
+    "img"      => $img,
    ]);
   } 
   

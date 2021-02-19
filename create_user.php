@@ -13,6 +13,8 @@
   $role = $_SESSION['auth']['role'];
   ($role == 'admin') ? is_not_logged_in($_SESSION['auth']['role']) : redirect_to ("users.php");
   
+  $image = $_FILES["myimage"]["name"];
+  
   clean_session();
 ?>
 <!DOCTYPE html>
