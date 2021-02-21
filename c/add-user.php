@@ -48,14 +48,19 @@ if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
  * upload_db_img       - добавление картинки в БД
  */
   $user_id = add_user_basic_info($name,$lastname,$prof,$phone,$address);
-  update_user_smm($user_id,$vk,$teleg,$insta);
-  update_user_privacy($user_id,$email,$passwrd,$status);
-  update_user_role($user_id,$role);
+  // update_user_smm($user_id,$vk,$teleg,$insta);
+  // update_user_privacy($user_id,$email,$passwrd,$status);
+  // update_user_role($user_id,$role);
 
 
 // проверяем тип файла,размер,записываем временное хранение файла в переменную
   $img_size    = 2*1024*1024;
   $file   	   = $_FILES['img']['tmp_name'];
+  $img_name    = $_FILES['img']['name'];
+  // var_dump($img_name);die;
+  //переместить файл из _tmp в папку
+
+
   $img_types   = substr($_FILES['img']['type'],0,5);
   // var_dump($file);die;
 
@@ -72,8 +77,10 @@ if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
    redirect_to ("create_user.php");
   }
   else {
+   //получить уникальное имя картинки
+   $filename = generate_filename($_FILES['img']);
    //загрузка файла в БД
-   upload_db_img($user_id,$file);
+   upload_db_img($user_id,$filename);
   }
 
   if(!empty($user_id)) {

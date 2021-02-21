@@ -51,6 +51,14 @@
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
 
+<!--      php 
+     $user_id = 197;
+     $showImg    = select_db_img($user_id);
+     // var_dump($showImg);die;
+    ?>
+    <img src="/img/demo/avatars/<?=$showImg['filename'];?>" width='50px' alt="Текст" title="Текст" />
+    <br/> -->
+
         <?php display_flash_message($_SESSION['class'],$_SESSION['message']); ?>
         <div class="subheader">
             <h1 class="subheader-title">

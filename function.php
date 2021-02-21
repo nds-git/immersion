@@ -219,24 +219,35 @@
    ]);
   }  
  
-  // UPDATE `user_privacy`  SET `email` =  'ffdvdklvndsvn@yandex.ru', `passwrd` = '$2y$10$ekvRCXsUBxSiGX822m7LZ.rumVwrihRw1zzYXsC7ZS8xG.lCs1bcm', `status` = 'онлайн', `role` = 'животное' WHERE `user_id` = '118'
+/*
+  *     сгенерировать уникальное имя картинки
+  *     на странице create_user.php  
+*/
+  function generate_filename($image) {
+    $extension = pathinfo($image['name'],PATHINFO_EXTENSION);
+    $filename = uniqid() . "." . $extension;
+    //загрузить картинку в папку
+    move_uploaded_file($image['tmp_name'], "../img/demo/avatars/".$filename);
+
+    return $filename;
+  }
   
 /*
   *     Изменение таблицы `user_img` грузим аватарку нового пользователя
   *     на странице create_user.php  
 */
-  function upload_db_img($user_id,$file) {
+  function upload_db_img($user_id,$filename) {
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
 
    $sql = "UPDATE `user_img`
-           SET `file` =  :file
+           SET `filename` =  :filename
            WHERE `user_id` = :user_id";
    $statement = $pdo->prepare($sql);
    $statement -> execute([
     "user_id"  => $user_id,
-    "file"     => $file,
+    "filename" => $filename
    ]);
  } 
 
@@ -248,10 +259,10 @@
   $charset = 'SET NAMES utf8';
 
   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
-  $sql = "SELECT `file` FROM `user_img` WHERE `user_id` = :user_id";
+  $sql = "SELECT `filename` FROM `user_img` WHERE `user_id` = :user_id";
   $statement    = $pdo->prepare($sql);
   $statement   -> execute ([
-                  "user_id" => $user_id  
+    "user_id" => $user_id  
   ]);
   $imgDb = $statement  -> fetch(PDO::FETCH_ASSOC);
   return $imgDb;
