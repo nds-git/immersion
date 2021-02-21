@@ -29,7 +29,7 @@
   $sql = "INSERT INTO `login` (`email`, `password`) VALUES (:email,  :password)";
   $statement = $pdo->prepare($sql);
   $statement -> execute([
-    "email" => $email,
+    "email"    => $email,
     "password" => password_hash($password, PASSWORD_DEFAULT)
   ]);
  }
@@ -118,11 +118,11 @@
   *     Добавление в базу нового пользователя 
   *     на странице create_user.php
 */
-  function add_user_basic_info($name,$lastname,$prof,$phone,$address,$role) {
+  function add_user_basic_info($name,$lastname,$prof,$phone,$address) {
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
-   $sql = "INSERT INTO `login` (`name`, `lastname`, `prof`, `phone`, `address`,`role`) VALUES (:name, :lastname, :prof, :phone, :address, :role)";
+   $sql = "INSERT INTO `login` (`name`, `lastname`, `prof`, `phone`, `address`) VALUES (:name, :lastname, :prof, :phone, :address)";
    $statement = $pdo->prepare($sql);
    // var_dump($statement);die;
    $statement -> execute([
@@ -131,7 +131,6 @@
     "prof"     => $prof,
     "phone"    => $phone,
     "address"  => $address,
-    "role"     => $role
    ]);
    // var_dump($statement);die;
    // Получаем id вставленной записи
@@ -146,9 +145,15 @@
    $sql3 = "INSERT INTO `user_img` (`user_id`) VALUES (:user_id)";
    $statement3 = $pdo->prepare($sql3);
    $statement3 -> execute([
-    "user_id"  => $user_id,
+    "user_id"  => $user_id
    ]);
 
+   $sql4 = "INSERT INTO `user_privacy` (`user_id`) VALUES (:user_id)";
+   $statement4 = $pdo->prepare($sql4);
+   $statement4 -> execute([
+    "user_id"  => $user_id
+   ]);
+   // var_dump($statement4);die;
    return $user_id;
   }
   // INSERT INTO `login` (`name`, `lastname`,  `prof`, `phone`, `address`) VALUES ('Вася', 'Gegv', 'он', 'lf', 'fdf');
@@ -175,19 +180,79 @@
    ]);
   } 
   
-  /*
-  *     Добавление в таблицу `user_img` данные SMM нового пользователя
+/*
+  *     Изменение таблицы `user_privacy` секретные д-е нового пользователя
   *     на странице create_user.php  
 */
-  function update_user_img($user_id,$img) {
+  function update_user_privacy($user_id,$email,$passwrd,$status) {
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
-   $sql = "UPDATE `user_img` SET `user_id` = :user_id,`vk` =  :vk, `teleg` = :teleg,`insta` = :insta";
+   $sql = "UPDATE `user_privacy` 
+           SET `email` =  :email, `passwrd` = :passwrd, `status` = :status
+           WHERE `user_id` = :user_id";
+   $statement = $pdo->prepare($sql);
+   // var_dump($statement);die;
+   $statement -> execute([
+    "email"    => $email,
+    "passwrd"  => password_hash($passwrd, PASSWORD_DEFAULT),
+    "status"   => $status,
+    "user_id"  => $user_id
+   ]);
+  }  
+/*
+  *     Изменение таблицы `user_privacy` роль пользователя
+  *     на странице create_user.php  
+*/
+  function update_user_role($user_id,$role) {
+   $charset = 'SET NAMES utf8';
+
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+   $sql = "UPDATE `user_privacy` 
+           SET `role` =  :role
+           WHERE `user_id` = :user_id";
+   $statement = $pdo->prepare($sql);
+   // var_dump($statement);die;
+   $statement -> execute([
+    "role"    => $role,
+    "user_id"  => $user_id
+   ]);
+  }  
+ 
+  // UPDATE `user_privacy`  SET `email` =  'ffdvdklvndsvn@yandex.ru', `passwrd` = '$2y$10$ekvRCXsUBxSiGX822m7LZ.rumVwrihRw1zzYXsC7ZS8xG.lCs1bcm', `status` = 'онлайн', `role` = 'животное' WHERE `user_id` = '118'
+  
+/*
+  *     Изменение таблицы `user_img` грузим аватарку нового пользователя
+  *     на странице create_user.php  
+*/
+  function upload_db_img($user_id,$file) {
+   $charset = 'SET NAMES utf8';
+
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+
+   $sql = "UPDATE `user_img`
+           SET `file` =  :file
+           WHERE `user_id` = :user_id";
    $statement = $pdo->prepare($sql);
    $statement -> execute([
     "user_id"  => $user_id,
-    "img"      => $img,
+    "file"     => $file,
    ]);
-  } 
-  
+ } 
+
+/*
+  *     Извлечение для проверки из таблицы `user_img` аватар
+  *     на странице create_user.php  
+*/
+ function select_db_img($user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT `file` FROM `user_img` WHERE `user_id` = :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+                  "user_id" => $user_id  
+  ]);
+  $imgDb = $statement  -> fetch(PDO::FETCH_ASSOC);
+  return $imgDb;
+ }

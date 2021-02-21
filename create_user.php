@@ -12,9 +12,7 @@
 
   $role = $_SESSION['auth']['role'];
   ($role == 'admin') ? is_not_logged_in($_SESSION['auth']['role']) : redirect_to ("users.php");
-  
-  $image = $_FILES["myimage"]["name"];
-  
+    
   clean_session();
 ?>
 <!DOCTYPE html>
@@ -52,12 +50,13 @@
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+
         <?php display_flash_message($_SESSION['class'],$_SESSION['message']); ?>
         <div class="subheader">
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя</h1>
         </div>
-        <form action="/c/add-user.php" method="POST">
+        <form action="/c/add-user.php" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -114,7 +113,7 @@
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control" name = "password" />
+                                    <input type="password" id="simpleinput" class="form-control" name = "passwrd" />
                                 </div>   
                                 <!-- status -->
                                 <div class="form-group">
@@ -135,7 +134,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file" name = "img" />
+                                    <input type="file" name = "img" id="example-fileinput" class="form-control-file"  />
                                 </div>
                             </div>
                         </div>

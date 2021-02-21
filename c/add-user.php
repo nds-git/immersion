@@ -2,11 +2,11 @@
 session_start();
 include_once '../function.php';
 
-if( isset($_POST['email']) AND isset( $_POST['password']) AND
-    !empty($_POST['email']) AND !empty( $_POST['password']) )  //Если есть данные
+if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
+    !empty($_POST['email']) AND !empty( $_POST['passwrd']) )  //Если есть данные
 {
  $email     = htmlspecialchars($_POST['email']);  
- $password  = htmlspecialchars($_POST['password']); 
+ $passwrd  = htmlspecialchars($_POST['passwrd']); 
 
  //проверка, что такая почта существует
  $user      = get_user_by_email($email);
@@ -25,23 +25,56 @@ if( isset($_POST['email']) AND isset( $_POST['password']) AND
   $name         = htmlspecialchars($_POST['name']); 
   $lastname     = htmlspecialchars($_POST['lastname']); 
   $prof         = htmlspecialchars($_POST['prof']); 
-  $status       = htmlspecialchars($_POST['status']); 
   $phone        = htmlspecialchars($_POST['phone']); 
   $address      = htmlspecialchars($_POST['address']);
 
+  //загрузка картинки
   $img          = htmlspecialchars($_POST['img']);
 
+  //блок секретной инфо
+  $status       = htmlspecialchars($_POST['status']); 
   $role         = htmlspecialchars($_POST['role']); 
  
   //блок SMM
   $vk          = htmlspecialchars($_POST['vk']); 
   $teleg       = htmlspecialchars($_POST['teleg']); 
   $insta       = htmlspecialchars($_POST['insta']); 
-
-
-  $user_id = add_user_basic_info($name,$lastname,$prof,$phone,$address,$role);
+  
+ /*
+ * Добавление инфо о новом пользователе
+ * add_user_basic_info - базовая таблица, возвращает уник $user_id
+ * update_user_smm     - инфо о соц сетях
+ * update_user_role    - роль пользователя (админ, по умолч.user)
+ * upload_db_img       - добавление картинки в БД
+ */
+  $user_id = add_user_basic_info($name,$lastname,$prof,$phone,$address);
   update_user_smm($user_id,$vk,$teleg,$insta);
+  update_user_privacy($user_id,$email,$passwrd,$status);
+  update_user_role($user_id,$role);
 
+
+// проверяем тип файла,размер,записываем временное хранение файла в переменную
+  $img_size    = 2*1024*1024;
+  $file   	   = $_FILES['img']['tmp_name'];
+  $img_types   = substr($_FILES['img']['type'],0,5);
+  // var_dump($file);die;
+
+  // if(!isset($file)) {
+  //  set_flash_message("danger","<strong>Уведомление!</strong> Файл не выбран.");
+  //  redirect_to ("create_user.php");
+  // }
+  if($img_types !== 'image') {
+   set_flash_message("danger","<strong>Уведомление!</strong> Файл не картинка.");
+   redirect_to ("create_user.php");
+  }
+  elseif($_FILES['img']['size'] >= $img_size) {
+   set_flash_message("danger","<strong>Уведомление!</strong> Размер файла больше 2Mb.");
+   redirect_to ("create_user.php");
+  }
+  else {
+   //загрузка файла в БД
+   upload_db_img($user_id,$file);
+  }
 
   if(!empty($user_id)) {
    set_flash_message("success","<strong>Поздравляем!</strong> Пользователь добавлен.");
