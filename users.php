@@ -108,7 +108,7 @@
 
                                     <div class="dropdown-menu">
                                        <a class="dropdown-item" href="page_profile.php?user_id=<?=$u_list[user_id]?>">
-                                            <i class="fa fa-shield"></i>
+                                        <i class="fa fa-shield"></i>
                                             Профиль
                                         </a>
                                         <a class="dropdown-item" href="edit.php?user_id=<?=$u_list[user_id]?>">

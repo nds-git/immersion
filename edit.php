@@ -108,7 +108,7 @@
                                     <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['phone']?>" name="phone" />
                                 </div> 
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Телефон</label>
+                                    <label class="form-label" for="simpleinput">Адрес</label>
                                     <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['address']?>" name="address" />
                                 </div> 
                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
