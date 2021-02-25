@@ -1,3 +1,32 @@
+<?php
+  session_start();
+  include_once './function.php';
+   // var_dump($_SESSION);die;
+
+  /*
+   *  var_dump($_SESSION);die;
+   *  необходимо проверить, что админ может зайти на 
+   *  страницу просмотра профиля пользователей или
+   *  user, но тогда нужно проверить, что он смотрит
+   *  только свою страницу,
+   *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
+  */
+
+  $s_role   = $_SESSION['auth']['role'];
+  $s_id     = $_SESSION['auth']['user_id'];
+  // var_dump($s_id);die;
+  
+  if(isset($_GET['user_id']))
+    $user_id = $_GET['user_id'];
+  $profile_user    = get_user_profile($user_id);
+  // var_dump($profile_user);die;
+
+  $profile_user_id = $profile_user[0]['user_id'];
+
+  is_author($s_role, $s_id, $user_id,$profile_user_id);
+
+  clean_session();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +48,7 @@
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item ">
-                        <a class="nav-link" href="#">Главная</a>
+                    <a class="nav-link" href="users.php">Главная <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -27,15 +56,19 @@
                         <a class="nav-link" href="#">Войти</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Выйти</a>
+                       <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
                     </li>
                 </ul>
             </div>
         </nav>
         <main id="js-page-content" role="main" class="page-content mt-3">
+        <?php 
+         foreach ($profile_user as $p_user):
+        ?>
             <div class="subheader">
                 <h1 class="subheader-title">
-                    <i class='subheader-icon fal fa-user'></i> Иван Иванов
+                    <i class='subheader-icon fal fa-user'></i> 
+                    <?php echo $p_user['name'] ." ". $p_user['lastname'];?>
                 </h1>
             </div>
             <div class="row">
@@ -45,19 +78,19 @@
                         <div class="row no-gutters row-grid">
                             <div class="col-12">
                                 <div class="d-flex flex-column align-items-center justify-content-center p-4">
-                                    <img src="img/demo/avatars/avatar-admin-lg.png" class="rounded-circle shadow-2 img-thumbnail" alt="">
+                                    <img src="img/demo/avatars/ " class="rounded-circle shadow-2 img-thumbnail" alt="">
                                     <h5 class="mb-0 fw-700 text-center mt-3">
-                                        Иван Иванов 
-                                        <small class="text-muted mb-0">Toronto, Canada</small>
+                                        <? echo $p_user['name'] ." ". $p_user['lastname'];?>
+                                        <small class="text-muted mb-0"><?=$p_user['address']?></small>
                                     </h5>
                                     <div class="mt-4 text-center demo">
-                                        <a href="javascript:void(0);" class="fs-xl" style="color:#C13584">
+                                        <a href="javascript:void(<?=$p_user['insta']?>);" class="fs-xl" style="color:#C13584">
                                             <i class="fab fa-instagram"></i>
                                         </a>
-                                        <a href="javascript:void(0);" class="fs-xl" style="color:#4680C2">
+                                        <a href="javascript:void(<?=$p_user['vk']?>);" class="fs-xl" style="color:#4680C2">
                                             <i class="fab fa-vk"></i>
                                         </a>
-                                        <a href="javascript:void(0);" class="fs-xl" style="color:#0088cc">
+                                        <a href="javascript:void(<?=$p_user['teleg']?>);" class="fs-xl" style="color:#0088cc">
                                             <i class="fab fa-telegram"></i>
                                         </a>
                                     </div>
@@ -66,18 +99,25 @@
                             <div class="col-12">
                                 <div class="p-3 text-center">
                                     <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                        <i class="fas fa-mobile-alt text-muted mr-2"></i> +1 317-456-2564</a>
+                                        <i class="fas fa-mobile-alt text-muted mr-2"></i> <?=$p_user['phone']?></a>
                                     <a href="mailto:oliver.kopyov@marlin.ru" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                        <i class="fas fa-mouse-pointer text-muted mr-2"></i> oliver.kopyov@marlin.ru</a>
+                                        <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?=$p_user['email']?></a>
                                     <address class="fs-sm fw-400 mt-4 text-muted">
-                                        <i class="fas fa-map-pin mr-2"></i> Восточные Королевства, Штормград 15
+                                        <i class="fas fa-map-pin mr-2"></i> <?=$p_user['address']?>
                                     </address>
+                                </div>
+                            </div>
+                           <div class="col-12">
+                                <div class="p-3 text-center">
+                                  <a class="dropdown-item" href="edit.php?user_id=<?=$p_user['user_id']?>">
+                                    <i class="fa fa-edit"></i>Редактировать</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                </div>
             </div>
+            <?endforeach?>
         </main>
     </body>
 

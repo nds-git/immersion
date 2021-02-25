@@ -107,6 +107,10 @@
                                     </a>
 
                                     <div class="dropdown-menu">
+                                       <a class="dropdown-item" href="page_profile.php?user_id=<?=$u_list[user_id]?>">
+                                            <i class="fa fa-shield"></i>
+                                            Профиль
+                                        </a>
                                         <a class="dropdown-item" href="edit.php?user_id=<?=$u_list[user_id]?>">
                                             <i class="fa fa-edit"></i>
                                         Редактировать</a>
@@ -148,13 +152,13 @@
                                 <address class="fs-sm fw-400 mt-4 text-muted">
                                     <i class="fas fa-map-pin mr-2"></i><?=$u_list[address]?></address>
                                 <div class="d-flex flex-row">
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#4680C2">
-                                        <i class="fab fa-vk"></i>
+                                    <a href="javascript:void(<?=$u_list[vk]?>);" class="mr-2 fs-xxl" style="color:#4680C2">
+                                       <i class="fab fa-vk"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#38A1F3">
+                                    <a href="javascript:void(<?=$u_list[teleg]?>);" class="mr-2 fs-xxl" style="color:#38A1F3">
                                         <i class="fab fa-telegram"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#E1306C">
+                                    <a href="javascript:void(<?=$u_list[insta]?>);" class="mr-2 fs-xxl" style="color:#E1306C">
                                         <i class="fab fa-instagram"></i>
                                     </a>
                                 </div>

@@ -107,7 +107,10 @@
                                     <label class="form-label" for="simpleinput">Телефон</label>
                                     <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['phone']?>" name="phone" />
                                 </div> 
-
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Телефон</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['address']?>" name="address" />
+                                </div> 
                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                     <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$i_user['user_id']?>" name = "user_id" />
 

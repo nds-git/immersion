@@ -180,11 +180,35 @@
   }
 
 
+/*
+  *      Функция для получения всех данных
+  *      1го пользователя с 4-х таблиц
+  *      на странице page_profile.php
+  *       
+*/
+  function get_user_profile($user_id) {
+   $charset = 'SET NAMES utf8';
 
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
+ 
+  $sql = "SELECT DISTINCT `user_info`.*,`user_img`.`filename`,`user_privacy`.`passwrd`,`user_privacy`.`email`,`user_privacy`.`status`,`user_smm`.`vk`,`user_smm`.`teleg`,`user_smm`.`insta` 
+    FROM `user_info`
+    LEFT JOIN `user_img` ON `user_info`.`user_id` = `user_img`.`user_id`
+    LEFT JOIN `user_privacy` ON `user_info`.`user_id` = `user_privacy`.`user_id`
+    LEFT JOIN `user_smm` ON `user_info`.`user_id` = `user_smm`.`user_id`
+    WHERE `user_info`.`user_id`  = :user_id";
+   $statement    = $pdo->prepare($sql);
+   $statement   -> execute ([
+    "user_id"    => $user_id
+   ]);    
+   $profile_user = $statement  -> fetchAll(PDO::FETCH_ASSOC);
+   return $profile_user;
+  }
 
 /*
-  *      Функция для получения всех  пользователей
-  *      на странице user.php
+  *      Функция для получения всех данных
+  *      всех пользователей с 4-х таблиц
+  *      на странице users.php
   *       
 */
   function get_users() {
