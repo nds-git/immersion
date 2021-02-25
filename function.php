@@ -142,8 +142,8 @@
   *      password - сравнить хэш пароль  
 */
   function authorization($email,$password) {
-   $auth = get_user_by_email($email);
-   if(password_verify($password, $auth['password']))
+   $auth = get_user_by_email_privacy($email);
+   if(password_verify($password, $auth['passwrd']))
       {
         $_SESSION['auth'] = $auth;
         return true;
@@ -299,6 +299,7 @@
     "address"    => $address,
     "user_id"    => $user_id
    ]);
+    return $user_id;
   } 
 
 /*
@@ -413,7 +414,20 @@
 
 
 /*
-  *      Функция для получения даннах конкретного пользователя
+  *      Функция проверки, что пользователь может редактировать
+  *      данных конкретного пользователя
+  *      на странице edit.php
+  *      либо админ - он может все редактировать,
+  *      либо конкретный user  свой конкретный аккаунт 
+*/
+function is_author($s_role, $s_id, $user_id,$info_user_id) {
+  ($s_role == 'admin' || $s_id == $info_user_id) 
+  ? is_not_logged_in($_SESSION['auth']['role']) 
+  : redirect_to ("users.php"); 
+}
+
+/*
+  *      Функция для получения данных конкретного пользователя
   *      для редактирования на странице edit.php
   *       
 */

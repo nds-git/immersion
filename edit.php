@@ -12,14 +12,16 @@
    *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
   */
 
-  $role = $_SESSION['auth']['role'];
-  ($role == 'admin') ? is_not_logged_in($_SESSION['auth']['role']) : redirect_to ("users.php");
+  $s_role   = $_SESSION['auth']['role'];
+  $s_id     = $_SESSION['auth']['user_id'];
+  // var_dump($s_id);die;
   
   if(isset($_GET['user_id']))
     $user_id = $_GET['user_id'];
+  $info_user    = get_info_user($user_id);
+  $info_user_id = $info_user[0]['user_id'];
 
-  $info_user = get_info_user($user_id);
-  // var_dump($info_user);die;  
+  is_author($s_role, $s_id, $user_id,$info_user_id);
 
   clean_session();
 ?>
@@ -57,6 +59,12 @@
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+            
+        <?php
+         display_flash_message($_SESSION['class'],$_SESSION['message']); 
+         // echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
+         
+        ?> 
 
         <div class="subheader">
             <h1 class="subheader-title">

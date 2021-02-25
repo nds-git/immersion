@@ -76,12 +76,12 @@ CREATE TABLE `user_img` (
 -- Дамп данных таблицы `user_img`
 --
 
-INSERT INTO `user_img` (`id`, `user_id`, `file`, `filename`) VALUES
-(95, 1, NULL, 'avatar-team-lead.png'),
-(96, 2, NULL, 'avatar-b.png'),
-(97, 3, NULL, 'avatar-e.png'),
-(98, 4, NULL, 'avatar-k.png'),
-(99, 5, NULL, '60375d58edb7c.png');
+INSERT INTO `user_img` (`id`, `user_id`, `filename`) VALUES
+(1, 1, 'avatar-team-lead.png'),
+(2, 2, 'avatar-b.png'),
+(3, 3, 'avatar-e.png'),
+(4, 4, 'avatar-k.png'),
+(5, 5, '60375d58edb7c.png');
 
 -- --------------------------------------------------------
 
@@ -90,7 +90,8 @@ INSERT INTO `user_img` (`id`, `user_id`, `file`, `filename`) VALUES
 --
 
 CREATE TABLE `user_info` (
-  `user_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `name` varchar(150) DEFAULT NULL,
   `lastname` varchar(150) DEFAULT NULL,
   `edu` varchar(150) DEFAULT NULL,
@@ -103,12 +104,12 @@ CREATE TABLE `user_info` (
 -- Дамп данных таблицы `user_info`
 --
 
-INSERT INTO `user_info` (`user_id`, `name`, `lastname`, `edu`, `prof`, `phone`, `address`) VALUES
-(1, 'Dmitriy', 'Nosov', 'СEO Director', 'Full Stack', '+7 926-482-8153', 'Malaysia,Kuala-Lumpur'),
-(2, 'Oliver', 'Kopyov', 'IT Director', 'Gotbootstrap Inc.', '+7 904-982-2173', '15 Charist St, Detroit, MI, 48212, USA'),
-(3, 'Dr. John', 'Cook PhD', 'Human Resources', 'IT Manager', '+1 313-779-1347', '55 Smyth Rd, Detroit, MI, 48341, USA'),
-(4, 'Jim', 'Ketty', 'Staff Orgnizer', 'Staff Orgnizer', '+7 313-779-1347', '34 Tasy Rd, Detroit, MI, 48212, USA'),
-(5, 'Вася', 'Курочкин', NULL, 'Сисадмин', '2523523235', 'Сибирячиха');
+INSERT INTO `user_info` (`id`,`user_id`, `name`, `lastname`, `edu`, `prof`, `phone`, `address`) VALUES
+(1, 1, 'Dmitriy', 'Nosov', 'СEO Director', 'Full Stack', '+7 926-482-8153', 'Malaysia,Kuala-Lumpur'),
+(2, 2, 'Oliver', 'Kopyov', 'IT Director', 'Gotbootstrap Inc.', '+7 904-982-2173', '15 Charist St, Detroit, MI, 48212, USA'),
+(3, 3, 'Dr. John', 'Cook PhD', 'Human Resources', 'IT Manager', '+1 313-779-1347', '55 Smyth Rd, Detroit, MI, 48341, USA'),
+(4, 4, 'Jim', 'Ketty', 'Staff Orgnizer', 'Staff Orgnizer', '+7 313-779-1347', '34 Tasy Rd, Detroit, MI, 48212, USA'),
+(5, 5, 'Вася', 'Курочкин', NULL, 'Сисадмин', '2523523235', 'Сибирячиха');
 
 -- --------------------------------------------------------
 
@@ -117,8 +118,7 @@ INSERT INTO `user_info` (`user_id`, `name`, `lastname`, `edu`, `prof`, `phone`, 
 --
 
 CREATE TABLE `user_privacy` (
-  `id` int(11) NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
   `email` varchar(150) DEFAULT NULL,
   `passwrd` varchar(150) DEFAULT NULL,
   `status` varchar(50) NOT NULL DEFAULT 'Отошел',
@@ -129,11 +129,12 @@ CREATE TABLE `user_privacy` (
 -- Дамп данных таблицы `user_privacy`
 --
 
-INSERT INTO `user_privacy` (`id`, `user_id`, `email`, `passwrd`, `status`, `role`) VALUES
-(85, 1, 'nds09@yandex.ru', '$2y$10$P..Vik6KkwrnmybrPEbW0eMZnb/FBg8.EK3ZaNQ0f2fZld6URzaLC', 'Онлайн', 'admin'),
-(86, 2, 'papa@yandex.ru', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'user'),
-(88, 3, 'z@stakancik.ru', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'user'),
-(89, 4, 'jim.ketty@gmail.com', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'admin');
+INSERT INTO `user_privacy` (`user_id`, `email`, `passwrd`, `status`, `role`) VALUES
+(1, 'nds09@yandex.ru', '$2y$10$P..Vik6KkwrnmybrPEbW0eMZnb/FBg8.EK3ZaNQ0f2fZld6URzaLC', 'Онлайн', 'admin'),
+(2, 'papa@yandex.ru', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'user'),
+(3, 'z@stakancik.ru', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'user'),
+(4, 'jim.ketty@gmail.com', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'admin'),
+(5, 'djoni@gmail.com', '$2y$10$KXFmta8hm7WhZXIsnyGp2u/b4sBchd1KY/xCpvLY/ydOiijKxryla', 'Онлайн', 'admin');
 
 -- --------------------------------------------------------
 
@@ -154,22 +155,17 @@ CREATE TABLE `user_smm` (
 --
 
 INSERT INTO `user_smm` (`id`, `user_id`, `vk`, `teleg`, `insta`) VALUES
-(115, 1, 'vk.com/go2up', 't.com/go2up', 'instagram.com/go2up'),
-(116, 2, 'vk.com/kop', 't.com/kop', 'instagram.com/kop'),
-(117, 3, 'vk.com/John', 't.com/John', 'instagram.com/John'),
-(118, 4, 'vk.com/ketty', 't.com/ketty', 'instagram.com/ketty'),
-(119, 5, 'vk.com/kur', 't.com/kur', 'instagram.com/kur');
+(1, 1, 'vk.com/go2up', 't.com/go2up', 'instagram.com/go2up'),
+(2, 2, 'vk.com/kop', 't.com/kop', 'instagram.com/kop'),
+(3, 3, 'vk.com/John', 't.com/John', 'instagram.com/John'),
+(4, 4, 'vk.com/ketty', 't.com/ketty', 'instagram.com/ketty'),
+(5, 5, 'vk.com/kur', 't.com/kur', 'instagram.com/kur');
 
 --
 -- Индексы сохранённых таблиц
 --
 
---
--- Индексы таблицы `login`
---
-ALTER TABLE `login`
-  ADD PRIMARY KEY (`id`);
-
+ 
 --
 -- Индексы таблицы `user_img`
 --
@@ -186,7 +182,7 @@ ALTER TABLE `user_info`
 -- Индексы таблицы `user_privacy`
 --
 ALTER TABLE `user_privacy`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- Индексы таблицы `user_smm`
@@ -198,35 +194,30 @@ ALTER TABLE `user_smm`
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
---
--- AUTO_INCREMENT для таблицы `login`
---
-ALTER TABLE `login`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
-
+ 
 --
 -- AUTO_INCREMENT для таблицы `user_img`
 --
 ALTER TABLE `user_img`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `user_privacy`
 --
 ALTER TABLE `user_privacy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `user_smm`
 --
 ALTER TABLE `user_smm`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

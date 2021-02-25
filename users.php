@@ -54,7 +54,7 @@
             
             <?php
              display_flash_message($_SESSION['class'],$_SESSION['message']); 
-             echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
+             // echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
             ?> 
             
             <div class="subheader">
