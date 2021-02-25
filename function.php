@@ -17,6 +17,42 @@
   $user = $statement  -> fetch(PDO::FETCH_ASSOC);
   return $user;
  }
+/*
+ *     Поиск в базе конкретного пользователя 
+ *     по одинаковой почте, чтобы сравнить
+ *     Если такой есть, мы выводим сообщение - "такой в базе есть "   
+*/
+ function get_user_by_email_privacy($email) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT * FROM `user_privacy` WHERE `email` = :email";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+                  "email" => $email  
+  ]);
+  $user = $statement  -> fetch(PDO::FETCH_ASSOC);
+  return $user;
+  var_dump($user);die;
+ }
+/*
+ *     проверка, что введенная почта не принадлежит другому  
+ *     пользователю на странице edit_user.php
+*/
+ function search_user_by_email($email,$user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT * FROM `user_privacy`
+          WHERE `email` = :email AND `user_id` != :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+                  "email"   => $email,
+                  "user_id" => $user_id  
+  ]);
+  $user = $statement  -> fetch(PDO::FETCH_ASSOC);
+  return $user;
+ }
 
 /*
  *     Добавление в базу нового пользователя 
@@ -33,6 +69,47 @@
     "password" => password_hash($password, PASSWORD_DEFAULT)
   ]);
  }
+ 
+/*
+ *     Добавление в базу нового пользователя 
+ *     на странице page_register.php  
+*/
+ function add_user_privacy($email,$passwrd) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+  $sql = "INSERT INTO `user_privacy` (`email`, `passwrd`) VALUES (:email,  :passwrd)";
+  $statement = $pdo->prepare($sql);
+  $statement -> execute([
+    "email"    => $email,
+    "passwrd" => password_hash($passwrd, PASSWORD_DEFAULT)
+  ]);
+  $user_id = $pdo->lastInsertId();
+
+  $sql1 = "INSERT INTO `user_info` (`user_id`) VALUES (:user_id)";
+  $statement1 = $pdo->prepare($sql1);
+  $statement1 -> execute([
+   "user_id"  => $user_id,
+  ]); 
+
+  $sql2 = "INSERT INTO `user_smm` (`user_id`) VALUES (:user_id)";
+  $statement2 = $pdo->prepare($sql2);
+  $statement2 -> execute([
+   "user_id"  => $user_id,
+  ]);
+
+  $sql3 = "INSERT INTO `user_img` (`user_id`) VALUES (:user_id)";
+  $statement3 = $pdo->prepare($sql3);
+  $statement3 -> execute([
+   "user_id"  => $user_id
+  ]);
+
+ 
+  // var_dump($statement4);die;
+  // return $user_id;
+  }
+
+
 
 /*
   *      Функция для получения стиля в $_SESSION
@@ -90,7 +167,7 @@
   *      Функция для получения всего списка пользователей
   *       
 */
-  function get_all_user() {
+  function get_all_users() {
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
@@ -100,6 +177,50 @@
    $statement   -> execute ([]);    
    $user = $statement  -> fetchAll(PDO::FETCH_ASSOC);
    return $user;
+  }
+
+
+
+
+/*
+  *      Функция для получения всех  пользователей
+  *      на странице user.php
+  *       
+*/
+  function get_users() {
+   $charset = 'SET NAMES utf8';
+
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
+
+/*
+*    SELECT user_info.*, user_smm.* FROM user_info JOIN user_smm ON user_info.user_id =user_smm.user_id
+*    SELECT user_info.*, user_smm.* FROM user_info LEFT JOIN user_smm ON user_info.user_id = user_smm.user_id
+*    Если значения одинаковые (user_id), то м.исп.USING(param)
+*    SELECT user_info.*, user_smm.* FROM user_info LEFT JOIN user_smm USING(user_id)
+*    ,`user_privacy`.`email`,`user_privacy`.`passwrd`,`user_privacy`.`status`,`user_privacy`.`role`, `user_img`.`filename`
+,`user_privacy`,`user_img`
+*    ВЫБОРКА ВСЕГО ИЗ ТРЕХ ТАБЛИЦ
+*    SELECT user_info.*, user_img.*, user_smm.* 
+     FROM user_info, user_img,user_smm 
+     WHERE user_info.user_id = user_smm.user_id AND user_info.user_id = user_img.user_id
+     *    ВЫБОРКА ВСЕГО ИЗ ТРЕХ ТАБЛИЦ
+*    SELECT user_info.*, user_img.*, user_smm.* 
+     FROM user_info, user_img,user_smm 
+     WHERE user_info.user_id = user_smm.user_id AND user_info.user_id = user_img.user_id
+*
+*/
+  $sql = "SELECT DISTINCT `user_info`.*,`user_img`.`filename`,`user_privacy`.`passwrd`,`user_privacy`.`email`,`user_privacy`.`status`,`user_smm`.`vk`,`user_smm`.`teleg`,`user_smm`.`insta` 
+    FROM `user_info`
+    LEFT JOIN `user_img` ON `user_info`.`user_id` = `user_img`.`user_id`
+    LEFT JOIN `user_privacy` ON `user_info`.`user_id` = `user_privacy`.`user_id`
+    LEFT JOIN `user_smm` ON `user_info`.`user_id` = `user_smm`.`user_id`";
+    // -- WHERE `user_info`.`user_id`  = :user_id";
+   $statement    = $pdo->prepare($sql);
+   $statement   -> execute ([
+    // "user_id"    => $user_id
+   ]);    
+   $info_user = $statement  -> fetchAll(PDO::FETCH_ASSOC);
+   return $info_user;
   }
 
 /*
@@ -118,23 +239,21 @@
   *     Добавление в базу нового пользователя 
   *     на странице create_user.php
 */
-  function add_user_basic_info($name,$lastname,$prof,$phone,$address) {
+  function add_user_privacy_info($email,$passwrd,$status) {
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
-   $sql = "INSERT INTO `login` (`name`, `lastname`, `prof`, `phone`, `address`) VALUES (:name, :lastname, :prof, :phone, :address)";
+   $sql = "INSERT INTO `user_privacy` (`email`,`passwrd`,`status`) VALUES (:email, :passwrd, :status)";
    $statement = $pdo->prepare($sql);
    // var_dump($statement);die;
    $statement -> execute([
-    "name"     => $name,
-    "lastname" => $lastname,
-    "prof"     => $prof,
-    "phone"    => $phone,
-    "address"  => $address,
+    "email"     => $email,
+    "passwrd"  => password_hash($passwrd, PASSWORD_DEFAULT),
+    "status"    => $status,
    ]);
    // var_dump($statement);die;
-   // Получаем id вставленной записи
    $user_id = $pdo->lastInsertId();
+
 
    $sql2 = "INSERT INTO `user_smm` (`user_id`) VALUES (:user_id)";
    $statement2 = $pdo->prepare($sql2);
@@ -148,7 +267,7 @@
     "user_id"  => $user_id
    ]);
 
-   $sql4 = "INSERT INTO `user_privacy` (`user_id`) VALUES (:user_id)";
+   $sql4 = "INSERT INTO `user_info` (`user_id`) VALUES (:user_id)";
    $statement4 = $pdo->prepare($sql4);
    $statement4 -> execute([
     "user_id"  => $user_id
@@ -156,7 +275,31 @@
    // var_dump($statement4);die;
    return $user_id;
   }
-  // INSERT INTO `login` (`name`, `lastname`,  `prof`, `phone`, `address`) VALUES ('Вася', 'Gegv', 'он', 'lf', 'fdf');
+ 
+ /*
+  *     Изменение табл `user_info` данные SMM нового пользователя 
+  *     на странице create_user.php  
+  *     
+*/
+  function update_user_basic_info($user_id,$name,$lastname,$prof,$edu,$phone,$address) {
+   $charset = 'SET NAMES utf8';
+
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+   $sql = "UPDATE `user_info` 
+           SET `name` =  :name, `lastname` = :lastname,`prof` = :prof, `edu` = :edu,`phone` = :phone,`address` = :address
+           WHERE `user_id` = :user_id";
+   $statement = $pdo->prepare($sql);
+   // var_dump($statement);die;
+   $statement -> execute([
+    "name"       => $name,
+    "lastname"   => $lastname,
+    "prof"       => $prof,
+    "edu"        => $edu,
+    "phone"      => $phone,
+    "address"    => $address,
+    "user_id"    => $user_id
+   ]);
+  } 
 
 /*
   *     Изменение табл `user_smm` данные SMM нового пользователя 
@@ -266,4 +409,25 @@
   ]);
   $imgDb = $statement  -> fetch(PDO::FETCH_ASSOC);
   return $imgDb;
+ }
+
+
+/*
+  *      Функция для получения даннах конкретного пользователя
+  *      для редактирования на странице edit.php
+  *       
+*/
+
+function get_info_user($user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT * FROM `user_info`
+          WHERE `user_id` = :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+                  "user_id" => $user_id  
+  ]);
+  $user = $statement  -> fetchAll(PDO::FETCH_ASSOC);
+  return $user;
  }

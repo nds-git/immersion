@@ -1,3 +1,28 @@
+<?php
+  session_start();
+  include_once './function.php';
+   // var_dump($_SESSION);die;
+
+  /*
+   *  var_dump($_SESSION);die;
+   *  необходимо проверить, что админ может зайти на 
+   *  страницу редактирования пользователей или
+   *  user, но тогда нужно проверить, что он редактирует
+   *  только свою страницу,
+   *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
+  */
+
+  $role = $_SESSION['auth']['role'];
+  ($role == 'admin') ? is_not_logged_in($_SESSION['auth']['role']) : redirect_to ("users.php");
+  
+  if(isset($_GET['user_id']))
+    $user_id = $_GET['user_id'];
+
+  $info_user = get_info_user($user_id);
+  // var_dump($info_user);die;  
+
+  clean_session();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +43,7 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="users.php">Главная <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -26,22 +51,28 @@
                     <a class="nav-link" href="page_login.html">Войти</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
                 </li>
             </ul>
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+
         <div class="subheader">
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-plus-circle'></i> Редактировать
             </h1>
 
         </div>
-        <form action="">
+        <form action="/c/edit-info-user.php" method="POST" enctype="multipart/form-data">
+        
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
+                    <?php    
+                     foreach ($info_user as $i_user):
+                    ?>
+
                         <div class="panel-container">
                             <div class="panel-hdr">
                                 <h2>Общая информация</h2>
@@ -50,31 +81,50 @@
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Иван иванов">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['name']?>" name="name">
                                 </div>
-
-                                <!-- title -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Marlin Веб-разработчик">
+                                    <label class="form-label" for="simpleinput">Фамилия</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['lastname']?>" name="lastname">
                                 </div>
-
-                                <!-- tel -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="8 888 8888 88">
+                                    <label class="form-label" for="simpleinput">Образование</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['edu']?>" name="edu">
                                 </div>
-
-                                <!-- address -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Восточные Королевства, Штормград">
+                                    <label class="form-label" for="simpleinput">Профессия</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['prof']?>" name="prof">
+                                </div>  
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Телефон</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['phone']?>" name="phone" />
+                                </div> 
+
+                <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                    <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$i_user['user_id']?>" name = "user_id" />
+
+                    <button type="submit" name="edit_user" class="btn btn-warning">Редактировать</button>
+                </div>
+                              </div>
+
+                        </div>  
+                
+     </div>>
+
+             
+                                    </div>
                                 </div>
-                                <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Редактировать</button>
-                                </div>
-                            </div>
+                   
+
                         </div>
+
+                    </div>
+                </div>
+
+           
+                          
+                <?endforeach?>
+
                     </div>
                 </div>
             </div>

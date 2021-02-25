@@ -2,14 +2,16 @@
 session_start();
 include_once '../function.php';
 
+
 if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
     !empty($_POST['email']) AND !empty( $_POST['passwrd']) )  //Если есть данные
 {
- $email     = htmlspecialchars($_POST['email']);  
- $passwrd  = htmlspecialchars($_POST['passwrd']); 
+ $email       = htmlspecialchars($_POST['email']);  
+ $passwrd     = htmlspecialchars($_POST['passwrd']); 
+ $user_id     = htmlspecialchars($_POST['user_id']);  
 
- //проверка, что такая почта существует
- $user      = get_user_by_email($email);
+ //проверка, что такая почта не занята другим пользователем
+ $user      = search_user_by_email($email, $user_id );
     
  /*
  * Если массив вернулся не пустым, 
@@ -17,15 +19,14 @@ if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
  */
 
  if(!empty($user)) {
-  set_flash_message("danger","<strong>Уведомление!</strong> Этот e-mail уже занят другим пользователем.");
-  redirect_to ("create_user.php");
+  set_flash_message("danger","<strong>Уведомление!</strong> Адрес: ".$email."  уже занят другим пользователем.");
+  redirect_to ("edit.php?user_id=".$user_id);
  }
  else {
   // основная информация уходит
   $name         = htmlspecialchars($_POST['name']); 
   $lastname     = htmlspecialchars($_POST['lastname']); 
   $prof         = htmlspecialchars($_POST['prof']); 
-  $edu          = htmlspecialchars($_POST['edu']); 
   $phone        = htmlspecialchars($_POST['phone']); 
   $address      = htmlspecialchars($_POST['address']);
 
@@ -48,13 +49,11 @@ if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
  * update_user_role    - роль пользователя (админ, по умолч.user)
  * upload_db_img       - добавление картинки в БД
  */
-  $user_id = add_user_privacy_info($email,$passwrd,$status);
+  $user_id = add_user_basic_info($name,$lastname,$prof,$phone,$address);
   update_user_smm($user_id,$vk,$teleg,$insta);
-  update_user_basic_info($user_id,$name,$lastname,$prof,$edu,$phone,$address);
+  update_user_privacy($user_id,$email,$passwrd,$status);
   update_user_role($user_id,$role);
-  //добавление в таблицу login
-  //для авторизации и исключения дублей e-mail
-  add_user($email,$passwrd);
+
 
 // проверяем тип файла,размер,записываем временное хранение файла в переменную
   $img_size    = 2*1024*1024;

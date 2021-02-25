@@ -12,7 +12,13 @@
 
   $role = $_SESSION['auth']['role'];
   ($role == 'admin') ? is_not_logged_in($_SESSION['auth']['role']) : redirect_to ("users.php");
-    
+  
+  if(isset($_GET['user_id']))
+    $user_id = $_GET['user_id'];
+
+  $info_user = get_info_user($user_id);
+  // var_dump($info_user);die;  
+
   clean_session();
 ?>
 <!DOCTYPE html>
@@ -28,20 +34,19 @@
     <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
     <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
     <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
         <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png"> Учебный проект</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="users.php">Главная <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="./login.php">Войти</a>
+                    <a class="nav-link" href="page_login.html">Войти</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
@@ -50,24 +55,23 @@
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
-
-<!--      php 
-     $user_id = 197;
-     $showImg    = select_db_img($user_id);
-     // var_dump($showImg);die;
-    ?>
-    <img src="/img/demo/avatars/<?=$showImg['filename'];?>" width='50px' alt="Текст" title="Текст" />
-    <br/> -->
-
         <?php display_flash_message($_SESSION['class'],$_SESSION['message']); ?>
+
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя</h1>
+                <i class='subheader-icon fal fa-plus-circle'></i> Редактировать
+            </h1>
+
         </div>
-        <form action="/c/add-user.php" method="POST" enctype="multipart/form-data">
+        <form action="/c/edit-info-user.php" method="POST" enctype="multipart/form-data">
+        
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
+                    <?php    
+                     foreach ($info_user as $i_user):
+                    ?>
+
                         <div class="panel-container">
                             <div class="panel-hdr">
                                 <h2>Общая информация</h2>
@@ -76,39 +80,27 @@
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "name" />
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['name']?>" name="name">
                                 </div>
-                                <!-- user lastname -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Фамилия</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "lastname" />
-                                </div>
-                                <!-- title -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Профессия</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "prof" />
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['lastname']?>" name="lastname">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Образование</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "edu" />
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['edu']?>" name="edu">
                                 </div>
-                                <!-- tel -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "phone" />
-                                </div>
-
-                                <!-- address -->
+                                    <label class="form-label" for="simpleinput">Профессия</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['prof']?>" name="prof">
+                                </div>  
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "address" />
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="col-xl-6">
+                                    <label class="form-label" for="simpleinput">Телефон</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['phone']?>" name="phone">
+                                </div> 
+                              </div>
+                        </div>  
+                    <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
                             <div class="panel-hdr">
@@ -117,19 +109,19 @@
                             <div class="panel-content">
                                 <!-- email -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" name = "email" />
-                                </div>
+                                    <label class="form-label" for="simpleinput">E-mail</label>
+                                    <input type="text" id="simpleinput" class="form-control" value="<?=$i_user['email']?>" name="email">
+                                </div> 
 
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control" name = "passwrd" />
+                                    <input type="password" id="simpleinput" class="form-control" value="<?=$i_user['passwrd']?>" name = "passwrd" />
                                 </div>   
                                 <!-- status -->
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Выберите статус</label>
-                                    <select class="form-control" id="example-select" name = "status" />
+                                    <select class="form-control" id="example-select" value="<?=$i_user['status']?>"  name = "status" />
                                         <option>Онлайн</option>
                                         <option>Отошел</option>
                                         <option>Не беспокоить</option>
@@ -138,20 +130,20 @@
                                 <!-- role -->
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Права доступа</label>
-                                    <select class="form-control" id="example-select" name = "role" />
+                                    <select class="form-control" id="example-select" value="<?=$i_user['role']?>"  name = "role" />
                                         <option>user</option>
                                         <option>admin</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                    <input type="file" name = "img" id="example-fileinput" class="form-control-file"  />
+                                    <input type="file" value="<?=$i_user['img']?>"  name = "img" id="example-fileinput" class="form-control-file"  />
                                 </div>
                             </div>
                         </div>
                         
                     </div>
-                </div>
+                </div> 
 
                 <div class="col-xl-12">
                     <div id="panel-1" class="panel">
@@ -172,7 +164,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name = "vk" />
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" value="<?=$i_user['vk']?>" name = "vk" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -186,7 +178,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name = "teleg" />
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" value="<?=$i_user['teleg']?>"  name = "teleg" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -200,16 +192,26 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name = "insta" />
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" value="<?=$i_user['insta']?>" name = "insta" />
                                         </div>
-                                    </div>
-                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                     <button class="btn btn-success" type="submit" name="create_user">Добавить</button>
+                <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                    <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$i_user['user_id']?>" name = "user_id" />
+
+                    <button type="submit" name="edit_user" class="btn btn-warning">Редактировать</button>
+                </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-                        
+
+                    </div>
+                </div>
+
+           
+                          
+                <?endforeach?>
+
                     </div>
                 </div>
             </div>
@@ -219,9 +221,34 @@
     <script src="js/vendors.bundle.js"></script>
     <script src="js/app.bundle.js"></script>
     <script>
-     $(document).ready(function()
-     {  
-     });
+
+        $(document).ready(function()
+        {
+
+            $('input[type=radio][name=contactview]').change(function()
+                {
+                    if (this.value == 'grid')
+                    {
+                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-g');
+                        $('#js-contacts .col-xl-12').removeClassPrefix('col-xl-').addClass('col-xl-4');
+                        $('#js-contacts .js-expand-btn').addClass('d-none');
+                        $('#js-contacts .card-body + .card-body').addClass('show');
+
+                    }
+                    else if (this.value == 'table')
+                    {
+                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-1');
+                        $('#js-contacts .col-xl-4').removeClassPrefix('col-xl-').addClass('col-xl-12');
+                        $('#js-contacts .js-expand-btn').removeClass('d-none');
+                        $('#js-contacts .card-body + .card-body').removeClass('show');
+                    }
+
+                });
+
+                //initialize filter
+                initApp.listFilter($('#js-contacts'), $('#js-filter-contacts'));
+        });
+
     </script>
 </body>
 </html>
