@@ -2,29 +2,26 @@
   session_start();
   include_once './function.php';
    // var_dump($_SESSION);die;
-
-  /*
-   *  var_dump($_SESSION);die;
-   *  необходимо проверить, что админ может зайти на 
-   *  страницу редактирования пользователей или
-   *  user, но тогда нужно проверить, что он редактирует
-   *  только свою страницу,
-   *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
-  */
-
+ 
+  
   $s_role   = $_SESSION['auth']['role'];
   $s_id     = $_SESSION['auth']['user_id'];
   // var_dump($s_id);die;
   
   if(isset($_GET['user_id']))
     $user_id = $_GET['user_id'];
-  $secure_user    = get_info_user($user_id);
-  $info_user_id = $secure_user[0]['user_id'];
+   // var_dump($user_id);die;
 
-  is_author($s_role, $s_id, $user_id,$info_user_id);
+  $user_img    = get_user_img($user_id);
+  // var_dump($user_img);die;
+
+  $user_img_id = $user_img[0]['user_id'];
+
+  is_author($s_role, $s_id, $user_id,$user_img_id );
 
   clean_session();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +67,7 @@
             </h1>
 
         </div>
-        <form action="">
+        <form action="/c/edit-img-user.php" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -80,17 +77,18 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="img/demo/authors/josh.png" alt="" class="img-responsive" width="200">
+                                    <img src="img/demo/avatars/<?=$user_img[0]['filename'];?>" alt="" class="img-responsive" width="100">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input type="file" value=""  name = "img" id="example-fileinput" class="form-control-file"  />
                                 </div>
+                    <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$user_id;?>" name = "user_id" />
 
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Загрузить</button>
+                                    <button type="submit" name="edit_img" class="btn btn-warning">Загрузить</button>
                                 </div>
                             </div>
                         </div>

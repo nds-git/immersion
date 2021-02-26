@@ -2,29 +2,30 @@
   session_start();
   include_once './function.php';
    // var_dump($_SESSION);die;
-
-  /*
-   *  var_dump($_SESSION);die;
-   *  необходимо проверить, что админ может зайти на 
-   *  страницу редактирования пользователей или
-   *  user, но тогда нужно проверить, что он редактирует
-   *  только свою страницу,
-   *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
-  */
-
+ 
+  
   $s_role   = $_SESSION['auth']['role'];
   $s_id     = $_SESSION['auth']['user_id'];
   // var_dump($s_id);die;
   
   if(isset($_GET['user_id']))
     $user_id = $_GET['user_id'];
-  $secure_user    = get_info_user($user_id);
-  $info_user_id = $secure_user[0]['user_id'];
+   // var_dump($user_id);die;
 
-  is_author($s_role, $s_id, $user_id,$info_user_id);
+  $privacy    = get_info_privacy($user_id);
+  // var_dump($privacy);die;
+
+  $privacy_id  = $privacy[0]['user_id'];
+  $pr_status   = $privacy[0]['status'];
+
+  // var_dump($pr_status);die;
+
+  is_author($s_role, $s_id, $user_id,$privacy_id);
 
   clean_session();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +71,7 @@
             </h1>
 
         </div>
-        <form action="">
+        <form action="/c/edit-status-user.php" method="POST" >
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -84,16 +85,24 @@
                                         <!-- status -->
                                         <div class="form-group">
                                             <label class="form-label" for="example-select">Выберите статус</label>
-                                            <select class="form-control" id="example-select">
-                                                <option>Онлайн</option>
-                                                <option>Отошел</option>
-                                                <option>Не беспокоить</option>
+                                            <select class="form-control" id="example-select" name = "status" >
+                                             <?php
+                                               $arr_status =  get_privacy_status(); 
+                                               for($i = 0; $i < count($arr_status);$i++) {
+                                                if($arr_status[$i] === $pr_status)
+                                                 echo "<option selected>".$arr_status[$i]."</option>";
+                                                else
+                                                 echo "<option>".$arr_status[$i]."</option>";
+                                                }
+                                             ?>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning">Set Status</button>
-                                    </div>
+                    <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$user_id?>" name = "user_id" />
+
+                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                     <button type="submit" name="edit_status" class="btn btn-warning">Установить статус</button>
+                    </div>
                                 </div>
                             </div>
                         </div>

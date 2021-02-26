@@ -68,7 +68,6 @@
   $statement   -> execute ([ 
   ]);
   $arr_status = $statement  -> fetchAll(PDO::FETCH_COLUMN);
-  // var_dump($arr_status);die;
   return $arr_status;
  }
 /*
@@ -400,6 +399,22 @@
     "user_id"  => $user_id
    ]);
   } 
+
+  function update_user_status($user_id,$status) {
+   $charset = 'SET NAMES utf8';
+
+   $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));   
+   $sql = "UPDATE `user_privacy` 
+           SET `status` =  :status
+           WHERE `user_id` = :user_id";
+   $statement = $pdo->prepare($sql);
+   // var_dump($statement);die;
+   $statement -> execute([
+    "status"    => $status,
+    "user_id"   => $user_id
+   ]);
+  return $status;
+  } 
   
 /*
   *     Изменение таблицы `user_privacy` секретные д-е нового пользователя
@@ -470,6 +485,7 @@
     "user_id"  => $user_id,
     "filename" => $filename
    ]);
+   return $filename;
  } 
 
 /*
@@ -521,4 +537,24 @@ function get_info_user($user_id) {
   ]);
   $user = $statement  -> fetchAll(PDO::FETCH_ASSOC);
   return $user;
+ }
+
+ /*
+  *      Функция выбирает информацию с талицы
+  *      user_img  конкретного пользователя
+  *      для редактирования на странице media.php
+  *       
+*/
+function get_user_img($user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT * FROM `user_img`
+          WHERE `user_id` = :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+      "user_id" => $user_id  
+  ]);
+  $user_img = $statement  -> fetchAll(PDO::FETCH_ASSOC);
+  return $user_img;
  }
