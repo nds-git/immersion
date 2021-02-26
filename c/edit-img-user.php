@@ -20,7 +20,7 @@ if( isset($_POST['edit_img']) )  //Если есть данные
   $file   	   = $_FILES['img']['tmp_name'];
   $img_name    = $_FILES['img']['name'];
   $img_types   = substr($_FILES['img']['type'],0,5);
-  // var_dump($file);die;
+  // var_dump($_FILES['img']);die;
 
   if(!isset($file)) {
    set_flash_message("danger","<strong>Уведомление!</strong> Файл не выбран.");

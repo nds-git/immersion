@@ -13,7 +13,10 @@
    // var_dump($user_id);die;
 
   $user_img    = get_user_img($user_id);
-  // var_dump($user_img);die;
+  
+  $u_img =  $user_img[0]['filename'];
+  if(empty($u_img))
+     $u_img = "avatar-m.png";
 
   $user_img_id = $user_img[0]['user_id'];
 
@@ -77,11 +80,6 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <?php 
-                                     $u_img =  $user_img[0]['filename'];
-                                     if(empty($u_img))
-                                         $u_img = "avatar-m.png";
-                                    ?>
                                     <img src="img/demo/avatars/<?=$u_img;?>" alt="" class="img-responsive" width="100">
                                 </div>
 

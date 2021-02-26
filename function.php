@@ -460,11 +460,11 @@
   *     на странице create_user.php  
 */
   function generate_filename($image) {
+
     $extension = pathinfo($image['name'],PATHINFO_EXTENSION);
     $filename = uniqid() . "." . $extension;
     //загрузить картинку в папку
     move_uploaded_file($image['tmp_name'], "../img/demo/avatars/".$filename);
-
     return $filename;
   }
   
