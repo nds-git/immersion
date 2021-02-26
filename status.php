@@ -1,8 +1,35 @@
+<?php
+  session_start();
+  include_once './function.php';
+   // var_dump($_SESSION);die;
+
+  /*
+   *  var_dump($_SESSION);die;
+   *  необходимо проверить, что админ может зайти на 
+   *  страницу редактирования пользователей или
+   *  user, но тогда нужно проверить, что он редактирует
+   *  только свою страницу,
+   *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
+  */
+
+  $s_role   = $_SESSION['auth']['role'];
+  $s_id     = $_SESSION['auth']['user_id'];
+  // var_dump($s_id);die;
+  
+  if(isset($_GET['user_id']))
+    $user_id = $_GET['user_id'];
+  $secure_user    = get_info_user($user_id);
+  $info_user_id = $secure_user[0]['user_id'];
+
+  is_author($s_role, $s_id, $user_id,$info_user_id);
+
+  clean_session();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Безопаность</title>
     <meta name="description" content="Chartist.html">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
@@ -18,7 +45,7 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="users.php">Главная <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -26,12 +53,17 @@
                     <a class="nav-link" href="page_login.html">Войти</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
                 </li>
             </ul>
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+         <?php
+         display_flash_message($_SESSION['class'],$_SESSION['message']); 
+         // echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
+         
+        ?> 
         <div class="subheader">
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-sun'></i> Установить статус

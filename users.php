@@ -114,13 +114,13 @@
                                         <a class="dropdown-item" href="edit.php?user_id=<?=$u_list[user_id]?>">
                                             <i class="fa fa-edit"></i>
                                         Редактировать</a>
-                                        <a class="dropdown-item" href="security.html">
+                                        <a class="dropdown-item" href="security.php?user_id=<?=$u_list[user_id]?>">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.php?user_id=<?=$u_list[user_id]?>">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.php?user_id=<?=$u_list[user_id]?>">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>

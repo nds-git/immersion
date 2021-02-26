@@ -23,6 +23,9 @@
 
   $profile_user_id = $profile_user[0]['user_id'];
 
+  $profile_img = get_profile_img($user_id);
+  // var_dump($profile_img);die;
+
   is_author($s_role, $s_id, $user_id,$profile_user_id);
 
   clean_session();
@@ -78,7 +81,7 @@
                         <div class="row no-gutters row-grid">
                             <div class="col-12">
                                 <div class="d-flex flex-column align-items-center justify-content-center p-4">
-                                    <img src="img/demo/avatars/ " class="rounded-circle shadow-2 img-thumbnail" alt="">
+                                    <img src="img/demo/avatars/<?=$profile_img['filename']?>" class="rounded-circle shadow-2 img-thumbnail" alt="">
                                     <h5 class="mb-0 fw-700 text-center mt-3">
                                         <? echo $p_user['name'] ." ". $p_user['lastname'];?>
                                         <small class="text-muted mb-0"><?=$p_user['address']?></small>

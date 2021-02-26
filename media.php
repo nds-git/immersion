@@ -1,3 +1,30 @@
+<?php
+  session_start();
+  include_once './function.php';
+   // var_dump($_SESSION);die;
+
+  /*
+   *  var_dump($_SESSION);die;
+   *  необходимо проверить, что админ может зайти на 
+   *  страницу редактирования пользователей или
+   *  user, но тогда нужно проверить, что он редактирует
+   *  только свою страницу,
+   *  а также, что админ и юзер авторизованы, а не просто вошли по ссылке
+  */
+
+  $s_role   = $_SESSION['auth']['role'];
+  $s_id     = $_SESSION['auth']['user_id'];
+  // var_dump($s_id);die;
+  
+  if(isset($_GET['user_id']))
+    $user_id = $_GET['user_id'];
+  $secure_user    = get_info_user($user_id);
+  $info_user_id = $secure_user[0]['user_id'];
+
+  is_author($s_role, $s_id, $user_id,$info_user_id);
+
+  clean_session();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +45,7 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="users.php">Главная <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -26,15 +53,20 @@
                     <a class="nav-link" href="page_login.html">Войти</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
                 </li>
             </ul>
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+         <?php
+         display_flash_message($_SESSION['class'],$_SESSION['message']); 
+         // echo $_SESSION['auth']['name']." ". $_SESSION['auth']['lastname'] ;
+         
+        ?> 
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-lock'></i> Безопасность
+                <i class='subheader-icon fal fa-image'></i> Загрузить аватар
             </h1>
 
         </div>
@@ -44,34 +76,24 @@
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
                             <div class="panel-hdr">
-                                <h2>Обновление эл. адреса и пароля</h2>
+                                <h2>Текущий аватар</h2>
                             </div>
                             <div class="panel-content">
-                                <!-- email -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="john@example.com">
+                                    <img src="img/demo/authors/josh.png" alt="" class="img-responsive" width="200">
                                 </div>
 
-                                <!-- password -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
-                                </div>
-
-                                <!-- password confirmation-->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="example-fileinput">Выберите аватар</label>
+                                    <input type="file" id="example-fileinput" class="form-control-file">
                                 </div>
 
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Изменить</button>
+                                    <button class="btn btn-warning">Загрузить</button>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

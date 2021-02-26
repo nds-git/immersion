@@ -35,6 +35,6 @@ if( isset($_POST['name']) AND isset( $_POST['lastname']) AND
 
 else { //если нет данных 
   set_flash_message("danger","<strong>Внимание</strong> Имя и фамилия обязательные поля.");
-  redirect_to ("edit_user.php?user_id=".$user_id);
+  redirect_to ("edit.php?user_id=".$user_id);
 }
 

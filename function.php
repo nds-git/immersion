@@ -33,7 +33,43 @@
   ]);
   $user = $statement  -> fetch(PDO::FETCH_ASSOC);
   return $user;
-  var_dump($user);die;
+ }
+
+
+/*
+ *     Поиск в таблицу privacy конкретного пользователя 
+ *        
+*/
+ function get_info_privacy($user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT * FROM `user_privacy`
+          WHERE `user_id` = :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+      "user_id" => $user_id  
+  ]);
+  $privacy = $statement  -> fetchAll(PDO::FETCH_ASSOC);
+  return $privacy;
+ }
+
+/*
+ *     Выбрать в таблицк privacy
+ *     в колонке status - только уникальные значения
+ *       
+*/
+ function get_privacy_status() {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));  
+  $sql = "SELECT DISTINCT `status` FROM `user_privacy`";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([ 
+  ]);
+  $arr_status = $statement  -> fetchAll(PDO::FETCH_COLUMN);
+  // var_dump($arr_status);die;
+  return $arr_status;
  }
 /*
  *     проверка, что введенная почта не принадлежит другому  
@@ -246,6 +282,23 @@
    $info_user = $statement  -> fetchAll(PDO::FETCH_ASSOC);
    return $info_user;
   }
+
+/*
+  *     Выбрать картинку на страницу
+  *     _profile.php
+*/
+ function get_profile_img($user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
+  $sql = "SELECT `filename` FROM `user_img` WHERE `user_id` = :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+    "user_id" => $user_id  
+  ]);
+  $profile_img = $statement  -> fetch(PDO::FETCH_ASSOC);
+  return $profile_img;
+ }
 
 /*
   *     Выйти с удалением всех сессий   

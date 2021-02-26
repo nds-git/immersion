@@ -18,6 +18,7 @@
   
   if(isset($_GET['user_id']))
     $user_id = $_GET['user_id'];
+
   $info_user    = get_info_user($user_id);
   $info_user_id = $info_user[0]['user_id'];
 
