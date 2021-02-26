@@ -2,12 +2,13 @@
 session_start();
 include_once '../function.php';
 
+$user_id      = htmlspecialchars($_POST['user_id']);  
+
 //оставим проверку, вдруг критично важные данные нужны: телеф или т.п.
 if( isset($_POST['name']) AND isset( $_POST['lastname']) AND
     !empty($_POST['name']) AND !empty( $_POST['lastname']) )  //Если есть данные
 {
 
- $user_id      = htmlspecialchars($_POST['user_id']);  
  // основная информация
  $name         = htmlspecialchars($_POST['name']); 
  $lastname     = htmlspecialchars($_POST['lastname']); 

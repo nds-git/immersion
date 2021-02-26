@@ -2,13 +2,14 @@
 session_start();
 include_once '../function.php';
 
+$user_id     = htmlspecialchars($_POST['user_id']);  
+
 
 if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
     !empty($_POST['email']) AND !empty( $_POST['passwrd']) )  //Если есть данные
 {
  $email       = htmlspecialchars($_POST['email']);  
  $passwrd     = htmlspecialchars($_POST['passwrd']); 
- $user_id     = htmlspecialchars($_POST['user_id']);  
 
  //проверка, что такая почта не занята другим пользователем
  $secure_user = search_user_by_email($email, $user_id );
@@ -34,7 +35,7 @@ if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
   update_user_privacy($user_id,$email,$passwrd,$status);
 
   if(!empty($status)) {
-   set_flash_message("success","<strong>Поздравляем!</strong> секретные данные изменены.<a class=\"nav-link\" href=\"user.php\">Вернуться</a>");
+   set_flash_message("success","<strong>Поздравляем!</strong> секретные данные изменены.<a class=\"nav-link\" href=\"users.php\">Вернуться</a>");
    redirect_to ("security.php?user_id=".$user_id);
   }
   else{
@@ -45,7 +46,7 @@ if( isset($_POST['email']) AND isset( $_POST['passwrd']) AND
 }//fin если существует $_POST['email']) AND isset( $_POST['password'])
 
 else { //если нет данных почты и пароля
-  set_flash_message("danger","<strong>Внимание</strong> Пароль и e-mail обязательные поля.");
+  set_flash_message("danger","<strong>Внимание</strong> Пароль и e-mail обязательные поля.<a class=\"nav-link\" href=\"users.php\">Вернуться без изменений</a>");
   redirect_to ("security.php?user_id=".$user_id);
 }
 
