@@ -77,7 +77,12 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="img/demo/avatars/<?=$user_img[0]['filename'];?>" alt="" class="img-responsive" width="100">
+                                    <?php 
+                                     $u_img =  $user_img[0]['filename'];
+                                     if(empty($u_img))
+                                         $u_img = "avatar-m.png";
+                                    ?>
+                                    <img src="img/demo/avatars/<?=$u_img;?>" alt="" class="img-responsive" width="100">
                                 </div>
 
                                 <div class="form-group">
