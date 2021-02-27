@@ -1,7 +1,8 @@
 <?php
   session_start();
   include_once './function.php';
-  // var_dump($_SESSION);die;
+  
+  clean_session();
 ?>
 <!DOCTYPE html>
 <html lang="en">

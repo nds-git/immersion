@@ -30,7 +30,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Безопаность</title>
+    <title>Удаление пользователя</title>
     <meta name="description" content="Chartist.html">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
@@ -51,7 +51,7 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="./login.php?clearsession=true">Войти</a>
+                    <a class="nav-link" href="login..php?clearsession=true">Войти</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
@@ -67,46 +67,41 @@
         ?> 
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-sun'></i> Установить статус
+                <i class='subheader-icon fal fa-sun'></i> Вы действительно хотите удалить пользователя?
             </h1>
 
         </div>
-        <form action="/c/edit-status-user.php" method="POST" >
+        <form action="/c/c-del-user.php" method="POST" >
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
-                        <div class="panel-container">
-                            <div class="panel-hdr">
-                                <h2>Установка текущего статуса</h2>
-                            </div>
+                      <div class="panel-container">
+                        <div class="panel-hdr">
+                            <h2>Навсегда удалить пользователя</h2>
+                        </div>
                             <div class="panel-content">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <!-- status -->
-                                        <div class="form-group">
-                                            <label class="form-label" for="example-select">Выберите статус</label>
-                                            <select class="form-control" id="example-select" name = "status" >
-                                             <?php
-                                               $arr_status =  get_privacy_status(); 
-                                               for($i = 0; $i < count($arr_status);$i++) {
-                                                if($arr_status[$i] === $pr_status)
-                                                 echo "<option selected>".$arr_status[$i]."</option>";
-                                                else
-                                                 echo "<option>".$arr_status[$i]."</option>";
-                                                }
-                                             ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                    <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$user_id?>" name = "user_id" />
+                                  <div class="col-md-4">
+                                    <!-- status -->
+                                    <div class="form-group">
 
-                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                     <button type="submit" name="edit_status" class="btn btn-warning">Установить статус</button>
+
+  <p><b>Действительно Вас удалить?:</b><Br/>
+   <input type="radio" name="delete" value="0" checked > Я передумал <Br/>
+   <input type="radio" name="delete" value="1 ">  Настроен решительно <Br/>
+  </p>
+  </div>
+  </div>
+  <input type="hidden" class="form-control border-left-0 bg-transparent pl-0" value="<?=$user_id?>" name = "user_id" />
+
+<div class="col-md-12 mt-3 d-flex flex-row-reverse">
+ <button type="submit" name="del_user" class="btn btn-warning">Удалить навсегда</button>
+</div>
                     </div>
-                                </div>
-                            </div>
-                        </div>
+                  </div>
+                </div>
                         
+  
                     </div>
                 </div>
             </div>

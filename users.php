@@ -41,7 +41,7 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="page_login.html">Войти</a>
+                        <a class="nav-link" href="./login.php?clearsession=true">Войти</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>
@@ -124,7 +124,7 @@
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>
-                                        <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                        <a href="del-user.php?user_id=<?=$u_list[user_id]?>" class="dropdown-item" onclick="return confirm('are you sure?');">
                                             <i class="fa fa-window-close"></i>
                                             Удалить
                                         </a>

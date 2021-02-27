@@ -56,7 +56,7 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Войти</a>
+                        <a class="nav-link" href="./login.php?clearsession=true">Войти</a>
                     </li>
                     <li class="nav-item">
                        <a class="nav-link" href="./users.php?clearsession=true">Выйти</a>

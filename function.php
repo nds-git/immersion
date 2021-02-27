@@ -250,25 +250,7 @@
    $charset = 'SET NAMES utf8';
 
    $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
-
-/*
-*    SELECT user_info.*, user_smm.* FROM user_info JOIN user_smm ON user_info.user_id =user_smm.user_id
-*    SELECT user_info.*, user_smm.* FROM user_info LEFT JOIN user_smm ON user_info.user_id = user_smm.user_id
-*    Если значения одинаковые (user_id), то м.исп.USING(param)
-*    SELECT user_info.*, user_smm.* FROM user_info LEFT JOIN user_smm USING(user_id)
-*    ,`user_privacy`.`email`,`user_privacy`.`passwrd`,`user_privacy`.`status`,`user_privacy`.`role`, `user_img`.`filename`
-,`user_privacy`,`user_img`
-*    ВЫБОРКА ВСЕГО ИЗ ТРЕХ ТАБЛИЦ
-*    SELECT user_info.*, user_img.*, user_smm.* 
-     FROM user_info, user_img,user_smm 
-     WHERE user_info.user_id = user_smm.user_id AND user_info.user_id = user_img.user_id
-     *    ВЫБОРКА ВСЕГО ИЗ ТРЕХ ТАБЛИЦ
-*    SELECT user_info.*, user_img.*, user_smm.* 
-     FROM user_info, user_img,user_smm 
-     WHERE user_info.user_id = user_smm.user_id AND user_info.user_id = user_img.user_id
-*
-*/
-  $sql = "SELECT DISTINCT `user_info`.*,`user_img`.`filename`,`user_privacy`.`passwrd`,`user_privacy`.`email`,`user_privacy`.`status`,`user_smm`.`vk`,`user_smm`.`teleg`,`user_smm`.`insta` 
+   $sql = "SELECT DISTINCT `user_info`.*,`user_img`.`filename`,`user_privacy`.`passwrd`,`user_privacy`.`email`,`user_privacy`.`status`,`user_smm`.`vk`,`user_smm`.`teleg`,`user_smm`.`insta` 
     FROM `user_info`
     LEFT JOIN `user_img` ON `user_info`.`user_id` = `user_img`.`user_id`
     LEFT JOIN `user_privacy` ON `user_info`.`user_id` = `user_privacy`.`user_id`
@@ -352,7 +334,46 @@
    return $user_id;
   }
  
- /*
+/*
+  *     Удаление пользователя в таблице регистрации login
+  *     на странице del_user.php  
+  *     
+*/  
+function delete_from_tb_login($email) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
+  $sql = "DELETE FROM `login` 
+          WHERE `email`  = :email";
+  $statement    = $pdo->prepare($sql);
+  $statement    -> execute ([
+    "email"     => $email
+  ]);
+}
+
+/*
+  *     Удаление пользователя со всех таблиц
+  *     user_info,user_img,user_privacy,user_smm
+  *     на странице del_user.php  
+  *     
+*/   
+function delete_user($user_id) {
+  $charset = 'SET NAMES utf8';
+
+  $pdo = new PDO("mysql:host=localhost;dbname=immersion","root","root",array(PDO::MYSQL_ATTR_INIT_COMMAND => "$charset"));
+  $sql = "DELETE `user_info`,`user_img`,`user_smm`,`user_privacy`
+          FROM user_privacy 
+          LEFT JOIN `user_info` ON `user_privacy`.`user_id` = `user_info`.`user_id`
+          LEFT JOIN `user_img` ON `user_privacy`.`user_id` = `user_img`.`user_id`
+          LEFT JOIN `user_smm` ON `user_privacy`.`user_id` = `user_smm`.`user_id`
+          WHERE `user_privacy`.`user_id`  = :user_id";
+  $statement    = $pdo->prepare($sql);
+  $statement   -> execute ([
+    "user_id"    => $user_id
+  ]);
+}
+
+/*
   *     Изменение табл `user_info` данные SMM нового пользователя 
   *     на странице create_user.php  
   *     
