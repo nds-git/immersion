@@ -1,18 +1,21 @@
 <?php
 session_start();
 include_once '../function.php';
+
 /*
  * Неободимо навсегда удалить пользователя:
  * Если удаляет пользователь с правами
  * admin, то переход на страницу users.php
  * сессия при этом остается
+ * если сам себя админ удаляет,
+ * он переходит на страницу page_register.php c удалением сессии
  * Если удаляет user - переход на страницу page_register.php
  * c удалением сессии
 */
+
 $role        = $_SESSION['auth']['role']; 
 $email       = $_SESSION['auth']['email']; 
 $session_id  = $_SESSION['auth']['user_id']; 
-// var_dump($session_id);die;
 
 $user_id     = htmlspecialchars($_POST['user_id']); 
 $delete      = htmlspecialchars($_POST['delete']); 
@@ -29,7 +32,6 @@ if( isset($_POST['del_user']) )  //Если есть данные
    redirect_to ("users.php");
   }
   else {
-   // $arr_privacy = get_info_privacy($user_id);
    if ($role === 'user' || ($role === 'admin' && $session_id == $user_id) )
    {
     delete_from_tb_login($email);
